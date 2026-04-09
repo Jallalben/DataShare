@@ -13,40 +13,54 @@ DataShare est une application web permettant aux utilisateurs de téléverser de
 
 ![Architecture Technique](./architecture.png)
 
-## 3. Choix Technologiques
-| Brique | Choix | Pourquoi ce choix |
-|--------|-------|-------------------|
-| Back-end | **NestJS (TypeScript)** | Architecture modulaire, injection de dépendances, base saine pour l'évolutivité. |
-| Front-end | **React (TypeScript)** | Ecosystème riche, partage des types avec le back-end. |
-| Base de données | **PostgreSQL** | Données relationnelles structurées, intégrité référentielle solide. |
-| ORM | **TypeORM** | Intégration native avec NestJS, decorators TypeScript. |
-| Auth | **JWT + bcrypt** | Standard de l'industrie pour les API stateless et sécurisation des mots de passe. |
-| Conteneurisation | **Docker** | Isolation et reproductibilité garantie sur tous les environnements. |
+## 3. Justification des Choix Techniques
 
-## 4. Modèle de Données (MCD)
-- **USERS**: id (UUID), email (UNIQUE), password (bcrypt), created_at, updated_at
-- **FILES**: id (UUID), user_id (FK), original_name, stored_name (UUID), mime_type, size, download_token (UNIQUE), password_hash (NULLABLE), expires_at, created_at
-- **TAGS**: id (UUID), name (VARCHAR)
-- **FILES_TAGS**: file_id (FK), tag_id (FK)
+Le projet DataShare a été conçu avec une approche "Product-First", en privilégiant la maintenabilité et la rapidité de mise en production sans sacrifier la rigueur architecturale.
 
-## 5. Contrat d'Interface API
+### 3.1 Langage et Frameworks
+*   **Back-end : NestJS (TypeScript)**
+    *   *Alternatives envisagées :* Spring Boot (Java), Express (JS).
+    *   *Justification :* Le choix de NestJS s'est imposé pour sa structure modulaire stricte. Contrairement à Express qui peut vite devenir désordonné, NestJS impose l'utilisation de modules, contrôleurs et services, ce qui facilite la revue de code et les tests. L'utilisation du TypeScript sur l'ensemble de la stack réduit drastiquement les erreurs de typage entre le front et le back.
+*   **Front-end : React (TypeScript) + Vite**
+    *   *Alternatives envisagées :* Angular, Vue.js.
+    *   *Justification :* React a été choisi pour sa flexibilité et son écosystème de hooks, permettant de gérer l'état d'authentification de manière fluide. Vite a été préféré à CRA (Create React App) pour ses performances de build et son rechargement à chaud (HMR) quasi instantané.
 
-### Auth
-- `POST /api/auth/register` : { email, password } -> 201 { id, email, token }
-- `POST /api/auth/login` : { email, password } -> 200 { id, email, token }
-- `GET /api/auth/me` : Authorization Header -> 200 { id, email }
+### 3.2 Persistance des données
+*   **Base de données : PostgreSQL**
+    *   *Alternatives envisagées :* MongoDB.
+    *   *Justification :* Pour une plateforme gérant des relations utilisateurs/fichiers/tags, une base relationnelle est indispensable pour garantir l'intégrité référentielle. PostgreSQL offre un support natif robuste des UUID, ce qui est crucial pour nos `download_tokens` non prédictibles.
 
-### Files
-- `POST /api/files/upload` : multipart { file, password?, expiresIn?, tags[]? } -> 201 { ...metadata... }
-- `GET /api/files` : Query ?status=... -> 200 List[Files]
-- `DELETE /api/files/:id` : 200 message
-- `GET /api/files/download/:token` : 200 metadata
-- `POST /api/files/download/:token` : { password? } -> 200 binary stream
+### 3.3 Outillage DevOps
+*   **Docker & Docker Compose** : Indispensable pour garantir que "ça marche sur ma machine" fonctionne aussi sur le serveur du jury. L'utilisation de builds multi-stage permet de garder des images de production légères.
+*   **Linter & Formatter** : ESLint et Prettier sont configurés avec des règles strictes pour assurer une cohérence stylistique, quel que soit l'outil de génération de code utilisé.
 
-### Health
-- `GET /api/health` : 200 { status: "ok", database: "connected" }
+## 4. Sécurité et Gestion des Accès
 
-## 6. Installation (Mode Développement)
-1. Cloner le repo : `git clone ...`
-2. Configurer `.env` à partir de `.env.example`
-3. Lancer : `docker compose up --build`
+La sécurité n'est pas une option pour DataShare. Nous avons implémenté plusieurs couches de protection :
+
+*   **Authentification Stateless** : Utilisation de **JWT (JSON Web Tokens)** pour une communication sécurisée entre le client et le serveur.
+*   **Chiffrement des données sensibles** : Les mots de passe ne sont jamais stockés en clair. Nous utilisons **bcrypt** avec 10 rounds de salt pour prévenir les attaques par force brute.
+*   **Obscurité des liens** : Les fichiers ne sont pas exposés par leur ID séquentiel mais via un `download_token` (UUID v4) unique, rendant toute tentative de deviner un lien statistiquement impossible.
+*   **Limites applicatives** : Une taille maximale de 1 Go est imposée côté serveur via Multer pour éviter le déni de service (DoS) par saturation disque.
+
+## 5. Utilisation de l'IA dans le développement
+
+Dans ce projet, l'IA a été traitée comme un **Pair Programmer Senior**.
+
+*   **Posture adoptée** : Un mélange de "Scaffolding" (pour les structures de base) et de "Reviewer" (pour valider la propreté du code).
+*   **Tâches confiées** : Scaffolding des modules NestJS, mise en place initiale du design system CSS et rédaction de la documentation technique.
+*   **Supervision humaine** : Chaque ligne de code générée a été revue, les types `any` ont été systématiquement remplacés par des interfaces strictes, et les routes de sécurité ont été vérifiées manuellement.
+*   **Apport & Limites** : L'IA permet un gain de temps massif sur les tâches répétitives (boilerplate), mais nécessite une vigilance constante sur la gestion des erreurs et la cohérence de l'architecture globale.
+
+## 6. Processus d'Installation et Exécution
+
+### Prérequis
+*   **Docker & Docker Compose**
+*   **Node.js v20+** (pour le développement local hors conteneur)
+
+### Commandes principales
+1.  **Copier l'exemple d'environnement** : `cp .env.example .env`
+2.  **Lancer l'application** : `docker compose up --build`
+3.  **Accéder au projet** :
+    *   Frontend : `http://localhost:3000`
+    *   Backend Health : `http://localhost:3001/api/health`
