@@ -1,30 +1,45 @@
-# Rapport de Sécurité — DataShare
+# 🛡️ Charte de Sécurité & de Confiance — DataShare
 
-Ce document répertorie les mesures de sécurité implémentées et l'analyse de risque du projet.
+Pour DataShare, la sécurité n'est pas une simple couche technique, c'est une promesse faite à nos utilisateurs. Ce document détaille comment nous protégeons l'intégrité de vos données et le respect de votre vie privée.
 
-## 1. Analyse de Risques & Réponses
+---
 
-| Risque | Impact | Mesures de mitigation |
+## 🔒 Notre Philosophie de Protection
+
+Nous croyons qu'un partage de fichiers réussi repose sur une confiance aveugle dans l'outil. C'est pourquoi chaque risque identifié a reçu une réponse technologique sans compromis.
+
+### 1. Analyse des Risques & Réponses Humaines
+
+| Risque Identifié | Impact Potentiel | Notre Bouclier |
 | :--- | :--- | :--- |
-| **Vol de mot de passe** | Critique | Utilisation de `bcrypt` (10 rounds) pour le hashage. Pas de stockage en clair. |
-| **Accès non autorisé** | Élevé | Protection des routes par JWT (stateless) avec expiration de 24h. |
-| **Injection de fichiers** | Élevé | Validation stricte du MIME-type et renommage systématique en UUID. |
-| **Saturation Disque (DoS)** | Moyen | Limite Multer à 1 Go par fichier et purge automatique par Cron. |
+| **Accès aux mots de passe** | Usurpation d'identité | **Cryptographie forte** : Utilisation de `bcrypt` (10 rounds). Même en cas d'accès direct, vos secrets restent illisibles. |
+| **Accès non autorisé** | Fuite de données | **Authentification Stateless** : Protection par JWT avec expiration courte. Chaque session est éphémère et sécurisée. |
+| **Fichiers malveillants** | Compromission serveur | **Validation stricte** : Filtrage par MIME-type et isolation complète via renommage en UUID. |
+| **Déni de Service (DoS)** | Indisponibilité | **Gestion des quotas** : Limites Multer (1 Go) et purges automatiques par tâches planifiées (Cron). |
 
-## 2. Standards de Sécurité
+---
 
-- **OWASP Top 10** : Protection contre les injections (via TypeORM), les expositions de données sensibles (via hashage) et les ruptures de contrôle d'accès (via JWT Guards).
-- **HTTPS** : Indispensable en production (géré via le reverse-proxy Nginx).
-- **CORS** : Configuré strictement pour n'autoriser que le domaine du domaine Frontend.
+## 🌐 Standards & Conformité
 
-## 3. Scans de Vulnérabilités
+Nous nous appuyons sur les meilleures pratiques de l'industrie pour garantir une robustesse à toute épreuve :
+- **OWASP Top 10** : Notre architecture est conçue pour neutraliser les injections (TypeORM), les expositions de données sensibles et les ruptures de contrôle d'accès.
+- **Trafic Chiffré** : En production, l'usage du HTTPS via un reverse-proxy est obligatoire pour protéger les données en transit.
+- **Politique CORS** : Un cloisonnement strict assure que seul le domaine officiel de DataShare peut interagir avec l'API.
 
-Nous recommandons l'utilisation des outils suivants en phase de maintenance :
-- **npm audit** : Détection des dépendances obsolètes ou vulnérables.
-- **Snyk** : Analyse statique du code (SAST) et des images Docker.
+---
+
+## 🛠️ Vigilance & Maintenance
+
+La sécurité est un processus continu. Nous recommandons et utilisons :
+- **Audit de dépendances** : Utilisation régulière de `npm audit` pour corriger les vulnérabilités Tierces.
+- **Analyse Statique** : Scans via Snyk pour détecter les failles dans le code et les images Docker.
 
 ```bash
-# Vérifier les vulnérabilités des dépendances
+# Pour vérifier la santé de l'écosystème
 cd backend && npm audit
 cd frontend && npm audit
 ```
+
+---
+
+*La sécurité est tout ce qui se dresse entre vos données et le reste du monde. Nous prenons ce rôle très au sérieux.*

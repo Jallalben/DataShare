@@ -1,37 +1,56 @@
-# Plan de Tests — DataShare
+# 🛡️ Garantie Qualité & Fiabilité — DataShare
 
-Ce document détaille la stratégie de test adoptée pour garantir la fiabilité de la plateforme DataShare.
+Pour nous, tester n'est pas une option, c'est l'assurance que DataShare fonctionnera parfaitement, à chaque fois, pour chaque utilisateur.
 
-## 1. Stratégie Globale
+---
 
-Nous suivons la pyramide des tests pour optimiser la couverture et la rapidité d'exécution :
-- **Tests Unitaires (70%)** : Validation de la logique métier (services NestJS, composants React).
-- **Tests d'Intégration (20%)** : Validation des interactions entre les modules et la base de données.
-- **Tests End-to-End (10%)** : Validation des parcours utilisateurs critiques.
+## 🏗️ Notre Pyramide de Confiance
 
-## 2. Outils de Testing
+Nous suivons une stratégie de test rigoureuse pour maximiser la couverture sans ralentir le développement.
 
-| Type | Outil | Justification |
+### 1. Tests Unitaires (La Base - 70%)
+Validation de chaque pièce de logique métier. Nous testons nos services NestJS et nos composants React de manière isolée pour garantir leur bon fonctionnement interne.
+
+### 2. Tests d'Intégration (Le Ciment - 20%)
+Nous vérifions que les différentes briques communiquent bien entre elles, notamment les appels à la base de données PostgreSQL et les communications JWT.
+
+### 3. Tests de Bout-en-Bout (L'Expérience - 10%)
+Simulation réelle du parcours utilisateur. Si un utilisateur peut uploader un fichier protéger par mot de passe et le retélécharger, alors nous avons réussi.
+
+---
+
+## 🧰 Nos Outils d'Excellence
+
+| Type de Test | Outil Choisi | Pourquoi ? |
 | :--- | :--- | :--- |
-| **Unit/Integration** | **Jest** | Intégration native NestJS, exécution rapide et mock automatique. |
-| **End-to-End** | **Cypress** | Simulation réaliste du navigateur, idéal pour tester l'upload et le download. |
-| **Couverture** | **Istanbul (via Jest)** | Fournit des rapports détaillés par fichier. |
+| **Logique (Unit/Int)** | **Jest** | Pour sa rapidité et son intégration parfaite avec TypeScript. |
+| **Parcours (E2E)** | **Cypress** | Pour observer l'application "en vrai" dans un navigateur. |
+| **Visibilité** | **Istanbul** | Pour mesurer avec précision chaque ligne de code couverte par nos tests. |
 
-## 3. Parcours Utilisateurs Critiques (Cypress)
+---
 
-1. **Authentification** : Inscription -> Connexion -> Déconnexion (Vérification du JWT).
-2. **Cycle de vie du fichier** : Sélection -> Upload -> Copie du lien -> Vérification dans le dashboard.
-3. **Téléchargement** : Accès au lien public -> Saisie du mot de passe -> Téléchargement effectif.
+## 🛣️ Parcours Critiques Surveillés
 
-## 4. Instructions d'exécution
+Rien n'est laissé au hasard sur ces trois flux essentiels :
+1. **L'Accès** : Inscription -> Connexion -> Déconnexion.
+2. **Le Partage** : Glisser-déposer -> Configuration sécurité -> Génération du lien.
+3. **La Réception** : Accès au lien public -> Saisie du secret -> Téléchargement.
+
+---
+
+## 🚀 Commencer à Tester
 
 ```bash
-# Tests Backend (Unit + Integration)
+# Lancer les tests de la logique métier (Backend)
 cd backend && npm run test
 
-# Couverture de code
+# Voir la couverture détaillée du code
 cd backend && npm run test:cov
 
-# Tests Frontend (Cypress)
+# Lancer les tests de parcours utilisateur (Frontend)
 cd frontend && npx cypress open
 ```
+
+---
+
+*Parce que la confiance se mérite par la preuve, nous testons sans relâche.*

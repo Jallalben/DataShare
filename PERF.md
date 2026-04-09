@@ -1,36 +1,43 @@
-# Rapport de Performance — DataShare
+# ⚡ Expérience & Vitesse — Rapport de Performance DataShare
 
-Ce document définit les objectifs de performance et les budgets de ressources pour DataShare.
+La performance n'est pas qu'une question de chiffres, c'est la politesse que nous devons à nos utilisateurs. Ce document définit nos standards d'excellence pour une expérience fluide.
 
-## 1. Budgets de Performance (Frontend)
+---
 
-Cibles Lighthouse pour la page d'accueil en production :
-- **Performance** : > 90
-- **Accessibility** : 100
-- **Best Practices** : 100
-- **SEO** : 100
+## 🎨 Excellence Interface (Frontend)
 
-| Métrique | Seuil |
-| :--- | :--- |
-| **First Contentful Paint (FCP)** | < 1.0s |
-| **Largest Contentful Paint (LCP)** | < 2.0s |
-| **Total Blocking Time (TBT)** | < 150ms |
+Nous visons le score parfait sur Lighthouse pour garantir que DataShare reste accessible et rapide sur tous les appareils.
 
-## 2. Performances Backend (API)
+| Métrique Lighthouse | Objectif | Pourquoi c'est important |
+| :--- | :--- | :--- |
+| **Performance** | +90 | Pour une réactivité instantanée. |
+| **Accessibilité** | 100 | Pour que personne ne soit laissé de côté. |
+| **Bonnes Pratiques** | 100 | Pour un Web sain et sécurisé. |
+| **SEO** | 100 | Pour une indexation optimale. |
 
-Cibles de temps de réponse pour les endpoints critiques :
-- `POST /api/auth/login` : < 200ms (hors hashage bcrypt lent par design).
-- `GET /api/files` : < 100ms.
-- **Upload Scale** : Capacité à gérer des flux montants jusqu'à 1 Gbit/s selon l'infrastructure.
+### Seuils de Rétention
+- **First Contentful Paint (FCP)** : < 1.0s (L'utilisateur voit que ça charge tout de suite).
+- **Largest Contentful Paint (LCP)** : < 2.0s (Le contenu principal est prêt).
+- **Total Blocking Time (TBT)** : < 150ms (L'interface répond sans délai).
 
-## 3. Outils de Mesure
+---
 
-- **Lighthouse** : Audit automatique intégré à Chrome DevTools.
-- **k6** : Pour le load-testing de l'API d'upload.
-- **npx vite preview** : Pour tester le build de production localement.
+## ⚡ Réactivité Serveur (API)
 
-## 4. Optimisations implémentées
+Notre backend est optimisé pour traiter vos demandes en un clin d'œil :
+- **Authentification** : < 200ms (Compromis optimal entre sécurité bcrypt et vitesse).
+- **Indexation** : Nous utilisons des index PostgreSQL sur les champs critiques pour des recherches en millisecondes.
+- **Capacité d'Upload** : L'architecture NestJS + Multer permet de saturer la bande passante disponible (jusqu'à 1 Gbit/s sur des serveurs dédiés).
 
-- **Build multi-stage Docker** : Réduction de la taille de l'image de 1.2 Go à ~200 Mo.
-- **Lazy Loading** : Les pages du dashboard ne sont chargées que si nécessaire.
-- **Indexing DB** : Indexation sur `user_id` et `download_token` pour des requêtes instantanées.
+---
+
+## 🚀 Optimisations Déjà en Place
+
+Nous n'avons pas seulement des objectifs, nous avons des solutions :
+- **Builds Multi-Stage** : Nos images Docker sont passées de 1.2 Go à ~200 Mo, accélérant les déploiements et réduisant l'usage mémoire.
+- **Chargement Différé (Lazy Loading)** : Seuls les composants nécessaires à la page actuelle sont chargés par le navigateur.
+- **Indexation de Base** : Les recherches par `download_token` sont instantanées, quelle que soit la taille de la base.
+
+---
+
+*La vitesse est la fondation sur laquelle repose le plaisir d'utiliser un outil.*

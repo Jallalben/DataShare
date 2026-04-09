@@ -1,30 +1,48 @@
-# Guide de Maintenance — DataShare
+# 🌱 Guide de Pérennité & Maintenance — DataShare
 
-Ce document décrit les procédures de mise à jour et la stratégie de cycle de vie du projet.
+DataShare est conçu pour durer. Ce document décrit comment entretenir la plateforme pour qu'elle reste performante, sécurisée et à jour au fil du temps.
 
-## 1. Cycle de vie des dépendances
+---
 
-- **Audit hebdomadaire** : Lancer `npm audit` sur le frontend et le backend.
-- **Mises à jour mineures** : Automatisées via Dependabot (recommandé).
-- **Mises à jour majeures** : Revue trimestrielle. Une attention particulière doit être portée sur NestJS et TypeORM.
+## 📅 Cycle de Vie des Dépendances
 
-## 2. Procédures de Mise à Jour (Deploy)
+Une application en bonne santé est une application dont les fondations sont solides.
+- **Audit Hebdomadaire** : Un coup d'œil rapide via `npm audit` permet d'anticiper les vulnérabilités.
+- **Mises à jour Mineures** : Nous faisons confiance à l'automatisation (Dependabot) pour garder les bibliothèques à jour.
+- **Revue Trimestrielle** : Un moment dédié pour les mises à jour majeures (NestJS, React, TypeORM), garantissant que nous profitons des dernières avancées technologiques.
 
-En production, utiliser la stratégie de déploiement Docker :
-1. Repull de l'image : `docker compose pull`
-2. Redémarrage sans interruption : `docker compose up -d --build --no-deps backend`
+---
 
-## 3. Stratégie de Backup
+## 🚀 Déploiement & Continuité de Service
 
-- **Base de données** : Backup hebdomadaire via `pg_dump`.
-- **Fichiers /uploads** : Synchronisation quotidienne vers un stockage froid (ex: S3 Glacier).
+La mise à jour de DataShare doit être une expérience transparente pour vos utilisateurs.
+
+### Stratégie Docker
+Pour déployer une nouvelle version en minimisant les interruptions :
+1. **Récupération** : `docker compose pull`
+2. **Relance Ciblée** : `docker compose up -d --build --no-deps backend`
+
+---
+
+## 💾 Assurance Données : Les Backups
+
+Vos données et celles de vos utilisateurs sont précieuses. Nous recommandons une stratégie de sauvegarde à deux niveaux :
+- **Base de données** : Snapshot hebdomadaire pour prévenir toute erreur de manipulation.
+- **Fichiers Uploadés** : Synchronisation quotidienne vers un stockage distant (S3, Glacier ou serveur de backup).
 
 ```bash
-# Exemple de backup rapide de la DB
-docker compose exec postgres pg_dump -U datashare datashare > backup_$(date +%F).sql
+# Sauvegarde rapide de la base de données
+docker compose exec postgres pg_dump -U datashare datashare > backups/db_$(date +%F).sql
 ```
 
-## 4. Risques et Plan de Reprise d'Activité (PRA)
+---
 
-- **Crash du conteneur DB** : Volume persistant `postgres_data` monté localement pour éviter la perte de données.
-- **Saturation du stockage** : Monitoring du dossier `/uploads` et ajustement de la fréquence du Cron `TasksModule`.
+## 🚨 Plan de Continuité (PRA)
+
+Nous avons anticipé les imprévus pour que vous n'ayez pas à le faire :
+- **Persistance Garantie** : Les données PostgreSQL sont stockées dans un volume Docker dédié (`postgres_data`), les protégeant des redémarrages de conteneurs.
+- **Gestion de l'Archive** : Pour éviter la saturation du disque, un module spécial (`TasksModule`) surveille la taille du stockage et purge automatiquement les fichiers obsolètes.
+
+---
+
+*Prendre soin du code aujourd'hui, c'est garantir sa fiabilité pour demain.*
