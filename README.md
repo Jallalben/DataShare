@@ -56,7 +56,7 @@ La sécurité est importante ici, donc voici ce qui est en place :
 
 ### Prérequis
 - Avoir Docker et Docker Compose installés.
-- Node.js (V20 ou plus) si vous voulez lancer le code en local sans Docker.
+- Node.js (V24) si vous voulez lancer le code en local sans Docker.
 
 ### Lancer le projet
 1. Préparez votre fichier de config : `cp .env.example .env`
