@@ -18,6 +18,8 @@ import { HealthModule } from './health/health.module';
       inject: [ConfigService],
     }),
     HealthModule,
+    UsersModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
