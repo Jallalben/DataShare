@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { databaseConfig } from './config/database.config';
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { databaseConfig } from './config/database.config';
       useFactory: (configService: ConfigService) => databaseConfig(),
       inject: [ConfigService],
     }),
+    HealthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
