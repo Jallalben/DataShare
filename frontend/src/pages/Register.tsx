@@ -37,62 +37,123 @@ const Register: React.FC = () => {
   };
 
   return (
-    <div className="auth-container">
+    <div className="auth-page">
       <style>{`
-        .auth-container { max-width: 400px; margin: 4rem auto; padding: 2rem; background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); border: 1px solid var(--border); }
-        .auth-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; text-align: center; }
-        .auth-subtitle { color: var(--text-secondary); text-align: center; margin-bottom: 2rem; font-size: 0.875rem; }
-        .auth-footer { margin-top: 1.5rem; text-align: center; font-size: 0.875rem; color: var(--text-secondary); }
-        .auth-link { color: var(--orange); font-weight: 600; text-decoration: none; }
-        .auth-link:hover { text-decoration: underline; }
+        .auth-page {
+          min-height: 100vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 2rem;
+        }
+        .auth-card {
+          width: 100%;
+          max-width: 440px;
+          padding: 3rem;
+          background: var(--bg-glass);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+          border-radius: var(--radius-figma);
+          box-shadow: var(--shadow-premium);
+          border: 1px solid rgba(255, 255, 255, 0.4);
+          animation: cardAppear 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes cardAppear {
+          from { opacity: 0; transform: translateY(20px) scale(0.98); }
+          to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .auth-logo {
+          font-size: 2rem;
+          font-weight: 800;
+          color: var(--orange);
+          text-align: center;
+          margin-bottom: 0.5rem;
+          letter-spacing: -0.04em;
+        }
+        .auth-title {
+          font-size: 1.5rem;
+          font-weight: 700;
+          margin-bottom: 0.75rem;
+          text-align: center;
+          color: var(--text-primary);
+        }
+        .auth-subtitle {
+          color: var(--text-secondary);
+          text-align: center;
+          margin-bottom: 2.5rem;
+          font-size: 0.9375rem;
+          font-weight: 400;
+        }
+        .auth-footer {
+          margin-top: 2rem;
+          text-align: center;
+          font-size: 0.9375rem;
+          color: var(--text-secondary);
+          font-weight: 500;
+        }
+        .auth-link {
+          color: var(--orange);
+          font-weight: 700;
+          text-decoration: none;
+          margin-left: 0.5rem;
+          transition: var(--transition);
+        }
+        .auth-link:hover {
+          opacity: 0.8;
+          text-decoration: underline;
+        }
       `}</style>
 
-      <h1 className="auth-title">Créer un compte</h1>
-      <p className="auth-subtitle">Rejoignez DataShare pour gérer vos fichiers en toute sécurité.</p>
+      <div className="auth-card">
+        <div className="auth-logo">DataShare</div>
+        <h1 className="auth-title">Inscription</h1>
+        <p className="auth-subtitle">Créez votre compte sécurisé.</p>
 
-      {error && <Callout type="danger" message={error} className="mb-4" />}
+        {error && <Callout type="danger" message={error} className="mb-6" />}
 
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Input
-          label="Adresse Email"
-          type="email"
-          placeholder="votre@email.com"
-          error={errors.email?.message}
-          {...register('email', {
-            required: "L'email est requis",
-            pattern: { value: /^\S+@\S+$/i, message: "Email invalide" }
-          })}
-        />
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Input
+            label="Adresse Email"
+            type="email"
+            placeholder="votre@email.com"
+            error={errors.email?.message}
+            {...register('email', {
+              required: "L'email est requis",
+              pattern: { value: /^\S+@\S+$/i, message: "Email invalide" }
+            })}
+          />
 
-        <Input
-          label="Mot de passe"
-          type="password"
-          placeholder="••••••••"
-          error={errors.password?.message}
-          {...register('password', {
-            required: "Le mot de passe est requis",
-            minLength: { value: 8, message: "8 caractères minimum" }
-          })}
-        />
+          <Input
+            label="Mot de passe"
+            type="password"
+            placeholder="••••••••"
+            error={errors.password?.message}
+            {...register('password', {
+              required: "Le mot de passe est requis",
+              minLength: { value: 8, message: "8 caractères minimum" }
+            })}
+          />
 
-        <Input
-          label="Confirmer le mot de passe"
-          type="password"
-          placeholder="••••••••"
-          error={errors.confirmPassword?.message}
-          {...register('confirmPassword', {
-            required: "La confirmation est requise",
-            validate: value => value === password || "Les mots de passe ne correspondent pas"
-          })}
-        />
+          <Input
+            label="Confirmer le mot de passe"
+            type="password"
+            placeholder="••••••••"
+            error={errors.confirmPassword?.message}
+            {...register('confirmPassword', {
+              required: "La confirmation est requise",
+              validate: value => value === password || "Les mots de passe divergent"
+            })}
+          />
 
-        <Button type="submit" fullWidth disabled={loading}>
-          {loading ? "Création en cours..." : "S'inscrire"}
-        </Button>
-      </form>
+          <Button type="submit" fullWidth loading={loading} size="lg">
+            S'inscrire
+          </Button>
+        </form>
 
-      <div className="auth-footer">
-        Déjà un compte ? <Link to="/login" className="auth-link">Se connecter</Link>
+        <div className="auth-footer">
+          Déjà un compte ? 
+          <Link to="/login" className="auth-link">Se connecter</Link>
+        </div>
       </div>
     </div>
   );

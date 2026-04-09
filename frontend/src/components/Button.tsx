@@ -1,9 +1,10 @@
 import React from 'react';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'danger';
+  variant?: 'primary' | 'outline' | 'ghost' | 'danger' | 'secondary';
   size?: 'sm' | 'md' | 'lg';
   fullWidth?: boolean;
+  loading?: boolean;
 }
 
 export const Button: React.FC<ButtonProps> = ({
@@ -11,57 +12,109 @@ export const Button: React.FC<ButtonProps> = ({
   variant = 'primary',
   size = 'md',
   fullWidth = false,
+  loading = false,
+  disabled,
   className = '',
   ...props
 }) => {
-  const baseStyles = 'inline-flex items-center justify-center font-medium rounded-md transition-all active:scale-95 disabled:opacity-50 disabled:pointer-events-none';
-  
-  const variants = {
-    primary: 'bg-[var(--orange)] text-white hover:bg-[var(--orange-hover)] shadow-sm',
-    secondary: 'bg-[var(--orange-light)] text-[var(--orange)] hover:bg-[var(--orange)] hover:text-white',
-    outline: 'border border-[var(--border)] text-[var(--text-primary)] hover:border-[var(--orange)] hover:text-[var(--orange)]',
-    danger: 'bg-[var(--danger)] text-white hover:opacity-90',
-  };
-
-  const sizes = {
-    sm: 'px-3 py-1.5 text-sm',
-    md: 'px-4 py-2',
-    lg: 'px-6 py-3 text-lg',
-  };
-
-  const styles = `
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 500;
-      border-radius: var(--radius-md);
-      transition: var(--transition);
-      cursor: pointer;
-      border: none;
-      gap: 0.5rem;
-    }
-    .btn:active { transform: scale(0.98); }
-    .btn-primary { background: var(--orange); color: white; }
-    .btn-primary:hover { background: var(--orange-hover); }
-    .btn-secondary { background: var(--orange-light); color: var(--orange); }
-    .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-primary); }
-    .btn-danger { background: var(--danger); color: white; }
-    .btn-full { width: 100%; }
-    .btn-sm { padding: 0.4rem 0.8rem; font-size: 0.875rem; }
-    .btn-md { padding: 0.6rem 1.2rem; }
-    .btn-lg { padding: 0.8rem 1.6rem; font-size: 1.1rem; }
-  `;
+  const isDisabled = disabled || loading;
 
   return (
-    <>
-      <style>{styles}</style>
-      <button
-        className={`btn btn-${variant} btn-${size} ${fullWidth ? 'btn-full' : ''} ${className}`}
-        {...props}
-      >
-        {children}
-      </button>
-    </>
+    <button
+      className={`btn btn-${variant} btn-${size} ${fullWidth ? 'btn-full' : ''} ${className}`}
+      disabled={isDisabled}
+      {...props}
+    >
+      <style>{`
+        .btn {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 600;
+          border-radius: var(--radius-figma);
+          transition: var(--transition);
+          font-family: 'Outfit', sans-serif;
+          gap: 0.6rem;
+          white-space: nowrap;
+          border: 2px solid transparent;
+          cursor: pointer;
+        }
+
+        .btn:active:not(:disabled) {
+          transform: scale(0.96);
+        }
+
+        .btn-full { width: 100%; }
+
+        .btn-sm { padding: 0.5rem 1.25rem; font-size: 0.875rem; }
+        .btn-md { padding: 0.75rem 1.75rem; font-size: 1rem; }
+        .btn-lg { padding: 1rem 2.5rem; font-size: 1.125rem; }
+
+        .btn-primary {
+          background: var(--gradient-primary);
+          color: white;
+          box-shadow: 0 4px 15px rgba(255, 126, 95, 0.25);
+        }
+        .btn-primary:hover:not(:disabled) {
+          box-shadow: 0 8px 25px rgba(255, 126, 95, 0.35);
+          transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+          background: white;
+          color: var(--orange);
+          box-shadow: var(--shadow-premium);
+        }
+        .btn-secondary:hover:not(:disabled) {
+          transform: translateY(-2px);
+          box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .btn-outline {
+          background: transparent;
+          border-color: rgba(255, 255, 255, 0.5);
+          color: white;
+          backdrop-filter: blur(4px);
+        }
+        .btn-outline:hover:not(:disabled) {
+          background: rgba(255, 255, 255, 0.1);
+          border-color: white;
+        }
+
+        .btn-ghost {
+          color: white;
+          opacity: 0.8;
+        }
+        .btn-ghost:hover:not(:disabled) {
+          opacity: 1;
+          background: rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-danger {
+          background: var(--danger);
+          color: white;
+        }
+
+        .btn:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+          filter: grayscale(0.5);
+        }
+
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+        .loader {
+          width: 18px;
+          height: 18px;
+          border: 2px solid rgba(255,255,255,0.3);
+          border-radius: 50%;
+          border-top-color: white;
+          animation: spin 0.8s linear infinite;
+        }
+      `}</style>
+      {loading && <div className="loader" />}
+      <span style={{ opacity: loading ? 0 : 1 }}>{children}</span>
+    </button>
   );
 };

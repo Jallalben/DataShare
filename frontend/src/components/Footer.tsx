@@ -8,13 +8,14 @@ export const Footer: React.FC = () => {
           padding: 2rem 0;
           margin-top: auto;
           text-align: center;
-          color: var(--text-muted);
+          color: white;
+          font-weight: 500;
+          opacity: 0.8;
           font-size: 0.875rem;
-          border-top: 1px solid var(--border-light);
         }
       `}</style>
       <div className="container">
-        Copyright DataShare® 2025
+        <p>&copy; {new Date().getFullYear()} DataShare - Share with confidence</p>
       </div>
     </footer>
   );

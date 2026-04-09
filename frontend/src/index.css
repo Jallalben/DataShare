@@ -1,31 +1,23 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 
 :root {
-  --gradient-bg: linear-gradient(180deg, #F5C4A1 0%, #E8967A 100%);
+  --gradient-primary: linear-gradient(135deg, #FF7E5F 0%, #FEB47B 100%);
+  --gradient-surface: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.02) 100%);
   --white: #FFFFFF;
-  --bg-light: #FFF8F5;
-  --text-primary: #1A1A1A;
-  --text-secondary: #666666;
-  --text-muted: #999999;
-  --orange: #E8734A;
-  --orange-hover: #D4623B;
-  --orange-light: #FFF0EB;
-  --danger: #E85D4A;
-  --callout-info-bg: #EEF4FF;
-  --callout-info-border: #B8D4F0;
-  --callout-warning-bg: #FFF8E6;
-  --callout-warning-border: #F0D8B8;
-  --callout-error-bg: #FFEEEE;
-  --callout-error-border: #F0B8B8;
-  --border: #E5E5E5;
-  --border-light: #F0F0F0;
-  --radius-sm: 6px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
-  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
-  --transition: all 0.2s ease-in-out;
+  --bg-glass: rgba(255, 255, 255, 0.9);
+  --text-primary: #2D2D2D;
+  --text-secondary: #6B7280;
+  --text-muted: #9CA3AF;
+  --orange: #FF7E5F;
+  --orange-hover: #F26644;
+  --danger: #EF4444;
+  --border: rgba(229, 231, 235, 0.5);
+  --radius-figma: 24px;
+  --radius-lg: 16px;
+  --radius-md: 12px;
+  --shadow-premium: 0 20px 40px rgba(0, 0, 0, 0.08);
+  --shadow-glass: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 * {
@@ -35,12 +27,15 @@
 }
 
 body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  background-color: var(--bg-light);
+  font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+  background: var(--gradient-primary);
+  background-attachment: fixed;
   color: var(--text-primary);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 h1, h2, h3, h4, h5, h6 {

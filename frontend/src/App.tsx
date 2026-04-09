@@ -9,22 +9,55 @@ import './App.css'
 
 function Home() {
   return (
-    <section id="center">
-      <div className="hero">
-        <img src={heroImg} className="base" width="170" height="179" alt="DataShare Hero" />
-      </div>
-      <div>
-        <h1>Partagez vos fichiers en toute sécurité</h1>
-        <p>
-          DataShare vous permet de téléverser des documents avec liens temporaires et protection par mot de passe.
-        </p>
-      </div>
-      <div style={{ display: 'flex', gap: '1rem', marginTop: '2rem' }}>
-        <Link to="/register" className="counter" style={{ textDecoration: 'none' }}>
-          Commencer
+    <section className="hero-section">
+      <style>{`
+        .hero-section {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+          padding: 4rem 1rem;
+          color: white;
+          animation: fadeIn 0.8s ease-out;
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .hero-title {
+          font-size: clamp(2.5rem, 8vw, 4rem);
+          font-weight: 800;
+          letter-spacing: -0.04em;
+          line-height: 1.1;
+          margin-bottom: 1.5rem;
+        }
+        .hero-subtitle {
+          font-size: 1.25rem;
+          opacity: 0.9;
+          max-width: 600px;
+          margin-bottom: 3rem;
+          line-height: 1.6;
+        }
+        .hero-actions {
+          display: flex;
+          gap: 1.5rem;
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+      `}</style>
+      
+      <h1 className="hero-title">Partagez vos fichiers <br/>en toute confiance.</h1>
+      <p className="hero-subtitle">
+        Solution sécurisée, temporaire et sans fioritures pour vos transferts de documents critiques.
+      </p>
+      
+      <div className="hero-actions">
+        <Link to="/register" style={{ textDecoration: 'none' }}>
+          <Button variant="secondary" size="lg">Commencer maintenant</Button>
         </Link>
-        <Link to="/login" className="counter" style={{ textDecoration: 'none', background: 'transparent', border: '1px solid var(--orange)', color: 'var(--orange)' }}>
-          Se connecter
+        <Link to="/login" style={{ textDecoration: 'none' }}>
+          <Button variant="outline" size="lg">Se connecter</Button>
         </Link>
       </div>
     </section>

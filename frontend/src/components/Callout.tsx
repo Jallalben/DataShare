@@ -1,42 +1,56 @@
 import React from 'react';
 
 interface CalloutProps {
-  type?: 'info' | 'warning' | 'error';
-  title?: string;
-  children: React.ReactNode;
+  type?: 'primary' | 'info' | 'warning' | 'danger';
+  message: string;
   className?: string;
 }
 
 export const Callout: React.FC<CalloutProps> = ({
   type = 'info',
-  title,
-  children,
+  message,
   className = '',
 }) => {
-  const styles = `
-    .callout {
-      padding: 1rem;
-      border-radius: var(--radius-md);
-      border: 1px solid;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      margin-bottom: 1rem;
-    }
-    .callout-info { background: var(--callout-info-bg); border-color: var(--callout-info-border); color: #004085; }
-    .callout-warning { background: var(--callout-warning-bg); border-color: var(--callout-warning-border); color: #856404; }
-    .callout-error { background: var(--callout-error-bg); border-color: var(--callout-error-border); color: var(--danger); }
-    .callout-title { font-weight: 700; font-size: 0.875rem; text-transform: uppercase; }
-    .callout-content { font-size: 0.875rem; }
-  `;
-
   return (
-    <>
-      <style>{styles}</style>
-      <div className={`callout callout-${type} ${className}`}>
-        {title && <div className="callout-title">{title}</div>}
-        <div className="callout-content">{children}</div>
-      </div>
-    </>
+    <div className={`callout callout-${type} ${className}`}>
+      <style>{`
+        .callout {
+          padding: 1rem 1.25rem;
+          border-radius: var(--radius-lg);
+          font-size: 0.875rem;
+          font-weight: 500;
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          border: 1px solid transparent;
+          animation: slideDown 0.3s ease-out;
+        }
+        @keyframes slideDown {
+          from { opacity: 0; transform: translateY(-10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .callout-primary {
+          background: rgba(255, 126, 95, 0.1);
+          color: #E8734A;
+          border-color: rgba(255, 126, 95, 0.2);
+        }
+        .callout-info {
+          background: rgba(59, 130, 246, 0.1);
+          color: #3B82F6;
+          border-color: rgba(59, 130, 246, 0.2);
+        }
+        .callout-warning {
+          background: rgba(245, 158, 11, 0.1);
+          color: #F59E0B;
+          border-color: rgba(245, 158, 11, 0.2);
+        }
+        .callout-danger {
+          background: rgba(239, 68, 68, 0.1);
+          color: #EF4444;
+          border-color: rgba(239, 68, 68, 0.2);
+        }
+      `}</style>
+      {message}
+    </div>
   );
 };

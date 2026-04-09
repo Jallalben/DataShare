@@ -38,57 +38,119 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="auth-container">
+    <div className="auth-page">
       <style>{`
-        .auth-container { max-width: 400px; margin: 4rem auto; padding: 2rem; background: white; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); border: 1px solid var(--border); }
-        .auth-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; text-align: center; }
-        .auth-subtitle { color: var(--text-secondary); text-align: center; margin-bottom: 2rem; font-size: 0.875rem; }
-        .auth-footer { margin-top: 1.5rem; text-align: center; font-size: 0.875rem; color: var(--text-secondary); }
-        .auth-link { color: var(--orange); font-weight: 600; text-decoration: none; }
+        .auth-page {
+          min-height: 100vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 2rem;
+        }
+        .auth-card {
+          width: 100%;
+          max-width: 440px;
+          padding: 3rem;
+          background: var(--bg-glass);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+          border-radius: var(--radius-figma);
+          box-shadow: var(--shadow-premium);
+          border: 1px solid rgba(255, 255, 255, 0.4);
+          animation: cardAppear 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes cardAppear {
+          from { opacity: 0; transform: translateY(20px) scale(0.98); }
+          to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .auth-logo {
+          font-size: 2rem;
+          font-weight: 800;
+          color: var(--orange);
+          text-align: center;
+          margin-bottom: 0.5rem;
+          letter-spacing: -0.04em;
+        }
+        .auth-title {
+          font-size: 1.5rem;
+          font-weight: 700;
+          margin-bottom: 0.75rem;
+          text-align: center;
+          color: var(--text-primary);
+        }
+        .auth-subtitle {
+          color: var(--text-secondary);
+          text-align: center;
+          margin-bottom: 2.5rem;
+          font-size: 0.9375rem;
+          font-weight: 400;
+        }
+        .auth-footer {
+          margin-top: 2rem;
+          text-align: center;
+          font-size: 0.9375rem;
+          color: var(--text-secondary);
+          font-weight: 500;
+        }
+        .auth-link {
+          color: var(--orange);
+          font-weight: 700;
+          text-decoration: none;
+          margin-left: 0.5rem;
+          transition: var(--transition);
+        }
+        .auth-link:hover {
+          opacity: 0.8;
+          text-decoration: underline;
+        }
       `}</style>
 
-      {registered && !error && (
-        <Callout 
-          type="primary" 
-          message="Compte créé ! Vous pouvez maintenant vous connecter." 
-          className="mb-4"
-        />
-      )}
+      <div className="auth-card">
+        <div className="auth-logo">DataShare</div>
+        <h1 className="auth-title">Connexion</h1>
+        <p className="auth-subtitle">Content de vous revoir !</p>
 
-      <h1 className="auth-title">Connexion</h1>
-      <p className="auth-subtitle">Accédez à votre espace DataShare.</p>
+        {registered && !error && (
+          <Callout 
+            type="primary" 
+            message="Compte créé avec succès ! Connectez-vous." 
+            className="mb-6"
+          />
+        )}
 
-      {error && <Callout type="danger" message={error} className="mb-4" />}
+        {error && <Callout type="danger" message={error} className="mb-6" />}
 
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Input
-          label="Adresse Email"
-          type="email"
-          placeholder="votre@email.com"
-          error={errors.email?.message}
-          {...register('email', {
-            required: "L'email est requis",
-            pattern: { value: /^\S+@\S+$/i, message: "Email invalide" }
-          })}
-        />
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Input
+            label="Adresse Email"
+            type="email"
+            placeholder="votre@email.com"
+            error={errors.email?.message}
+            {...register('email', {
+              required: "L'email est requis",
+              pattern: { value: /^\S+@\S+$/i, message: "Email invalide" }
+            })}
+          />
 
-        <Input
-          label="Mot de passe"
-          type="password"
-          placeholder="••••••••"
-          error={errors.password?.message}
-          {...register('password', {
-            required: "Le mot de passe est requis"
-          })}
-        />
+          <Input
+            label="Mot de passe"
+            type="password"
+            placeholder="••••••••"
+            error={errors.password?.message}
+            {...register('password', {
+              required: "Le mot de passe est requis"
+            })}
+          />
 
-        <Button type="submit" fullWidth disabled={loading}>
-          {loading ? "Connexion..." : "Se connecter"}
-        </Button>
-      </form>
+          <Button type="submit" fullWidth loading={loading} size="lg">
+            Se connecter
+          </Button>
+        </form>
 
-      <div className="auth-footer">
-        Pas encore de compte ? <Link to="/register" className="auth-link">S'inscrire</Link>
+        <div className="auth-footer">
+          Pas encore de compte ? 
+          <Link to="/register" className="auth-link">S'inscrire</Link>
+        </div>
       </div>
     </div>
   );
