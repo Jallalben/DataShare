@@ -21,24 +21,7 @@ L'idée de DataShare est de pouvoir envoyer un fichier rapidement, en ajoutant u
 
 ## Architecture technique
 
-```
-datashare/
-├── backend/          # API NestJS (TypeScript)
-│   ├── src/
-│   │   ├── auth/     # Authentification JWT + Bcrypt (US03/US04) ✅
-│   │   ├── users/    # Gestion des utilisateurs
-│   │   ├── files/    # Upload & partage de fichiers (US01 - en cours)
-│   │   └── health/   # Endpoint de santé
-│   └── test/         # Tests d'intégration Supertest
-├── frontend/         # SPA React + Vite (TypeScript)
-│   ├── src/
-│   │   ├── components/   # Button, Input, Callout, Header, Footer
-│   │   ├── pages/        # Login, Register, MySpace
-│   │   └── context/      # AuthContext (JWT persistance)
-│   └── cypress/          # Tests E2E (à venir)
-├── screenshots/      # Captures d'écran par phase
-└── docker-compose.yml
-```
+![Architecture Technique](./architecture.png)
 
 ---
 
