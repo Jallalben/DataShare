@@ -10,49 +10,53 @@
 DataShare est une application web permettant aux utilisateurs de téléverser des fichiers, de les protéger par mot de passe (optionnel) et de définir une durée d'expiration. Un lien unique et non prédictible est généré pour chaque fichier partagé. L'application inclut également un tableau de bord pour gérer l'historique des fichiers envoyés.
 
 ## 2. Architecture Technique
-```
-                    ┌──────────────────┐
-                    │    Navigateur    │
-                    │  (utilisateur)   │
-                    └────────┬─────────┘
-                             │ HTTP
-                    ┌────────▼─────────┐
-                    │   React + Vite   │
-                    │   Port 3000      │
-                    │   (TypeScript)   │
-                    └────────┬─────────┘
-                             │ REST / JSON
-┌────────────────────────────▼──────────────────────────┐
-│                    Docker Compose                      │
-│                                                        │
-│  ┌──────────────────────────────────────────────────┐  │
-│  │              NestJS API — Port 3001               │  │
-│  │                                                    │  │
-│  │  ┌────────────┐ ┌────────────┐ ┌──────────────┐  │  │
-│  │  │ AuthModule │ │FilesModule │ │ TasksModule  │  │  │
-│  │  │            │ │            │ │              │  │  │
-│  │  │ register   │ │ upload     │ │ cron purge   │  │  │
-│  │  │ login      │ │ download   │ │ quotidien    │  │  │
-│  │  │ JWT guard  │ │ history    │ │              │  │  │
-│  │  │            │ │ delete     │ │              │  │  │
-│  │  └────────────┘ └─────┬──┬──┘ └──────────────┘  │  │
-│  │                       │  │                        │  │
-│  │         ┌─────────────┘  └──────────┐            │  │
-│  │         ▼                           ▼            │  │
-│  │  ┌─────────────┐          ┌──────────────┐       │  │
-│  │  │ PostgreSQL  │          │ Stockage     │       │  │
-│  │  │ Port 5432   │          │ local        │       │  │
-│  │  │             │          │ ./uploads/   │       │  │
-│  │  │ users       │          │ (volume)     │       │  │
-│  │  │ files       │          │              │       │  │
-│  │  │ tags        │          │              │       │  │
-│  │  │ files_tags  │          │              │       │  │
-│  │  └─────────────┘          └──────────────┘       │  │
-│  └──────────────────────────────────────────────────┘  │
-│                                                        │
-│  GET /api/health ← healthcheck backend                 │
-│  pg_isready      ← healthcheck PostgreSQL              │
-└────────────────────────────────────────────────────────┘
+
+```mermaid
+graph TD
+    subgraph Client ["Client (Browser)"]
+        Navigator[Utilisateur / Navigateur]
+    end
+
+    subgraph Docker ["Docker Compose Boundary"]
+        Nginx["Nginx (Reverse Proxy & Static Server)"]
+        React["React + Vite (Port 3000)"]
+        
+        subgraph Backend ["NestJS API (Port 3001)"]
+            API[API Entry]
+            Auth[AuthModule]
+            Files[FilesModule]
+            Tasks[TasksModule]
+        end
+
+        DB[(PostgreSQL Port 5432)]
+        Disk[Stockage local /uploads]
+        Vol[Persistent Storage Docker Volumes]
+    end
+
+    %% Flux Client
+    Navigator -- "HTTP" --> Nginx
+    Nginx -- "Serve CSS/JS/HTML" --> React
+    React -- "REST API / JWT Auth" --> API
+
+    %% Flux Backend
+    API --- Auth
+    API --- Files
+    
+    Auth -- "User Registry" --> DB
+    Files -- "Metadata" --> DB
+    Files -- "Physical Upload" --> Disk
+    
+    %% Flux Purge
+    Tasks -- "Query Expired" --> DB
+    Tasks -- "Cleanup Files" --> Disk
+
+    %% Persistance
+    DB ==> Vol
+    Disk ==> Vol
+
+    %% Healthchecks
+    Health[GET /api/health] -.-> API
+    Ready[pg_isready] -.-> DB
 ```
 
 ## 3. Choix Technologiques
