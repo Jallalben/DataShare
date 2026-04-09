@@ -26,6 +26,12 @@ On glisse son fichier, on règle les options de sécurité, et on récupère le 
 
 ---
 
+## Architecture technique
+
+![Architecture Technique](./architecture.png)
+
+---
+
 ## Côté technique
 
 J'ai choisi des outils modernes pour que le projet soit facile à maintenir et rapide :
