@@ -1,45 +1,26 @@
-# 🛡️ Charte de Sécurité & de Confiance — DataShare
+# Sécurité sur DataShare
 
-Pour DataShare, la sécurité n'est pas une simple couche technique, c'est une promesse faite à nos utilisateurs. Ce document détaille comment nous protégeons l'intégrité de vos données et le respect de votre vie privée.
+Ce document explique comment les données sont protégées sur la plateforme.
 
----
+## Ce qui est mis en place
 
-## 🔒 Notre Philosophie de Protection
+Pour qu'un partage de fichiers soit sûr, j'ai implémenté plusieurs couches de protection :
 
-Nous croyons qu'un partage de fichiers réussi repose sur une confiance aveugle dans l'outil. C'est pourquoi chaque risque identifié a reçu une réponse technologique sans compromis.
+- **Chiffrement des mots de passe** : On utilise `bcrypt` avec 10 rounds. Les mots de passe ne sont jamais sauvés en clair, donc même en cas d'accès à la base, ils restent protégés.
+- **Accès sécurisé** : Les échanges entre le front et le back se font via des tokens JWT qui expirent après 24h.
+- **Liens de téléchargement** : Chaque lien généré est un UUID v4 unique. C'est impossible à deviner en essayant des combinaisons au hasard.
+- **Limites d'envoi** : On peut limiter la taille des fichiers (par défaut 1 Go) et les supprimer automatiquement après expiration pour ne pas remplir le disque.
 
-### 1. Analyse des Risques & Réponses Humaines
+## Outils utilisés pour la vérification
 
-| Risque Identifié | Impact Potentiel | Notre Bouclier |
-| :--- | :--- | :--- |
-| **Accès aux mots de passe** | Usurpation d'identité | **Cryptographie forte** : Utilisation de `bcrypt` (10 rounds). Même en cas d'accès direct, vos secrets restent illisibles. |
-| **Accès non autorisé** | Fuite de données | **Authentification Stateless** : Protection par JWT avec expiration courte. Chaque session est éphémère et sécurisée. |
-| **Fichiers malveillants** | Compromission serveur | **Validation stricte** : Filtrage par MIME-type et isolation complète via renommage en UUID. |
-| **Déni de Service (DoS)** | Indisponibilité | **Gestion des quotas** : Limites Multer (1 Go) et purges automatiques par tâches planifiées (Cron). |
-
----
-
-## 🌐 Standards & Conformité
-
-Nous nous appuyons sur les meilleures pratiques de l'industrie pour garantir une robustesse à toute épreuve :
-- **OWASP Top 10** : Notre architecture est conçue pour neutraliser les injections (TypeORM), les expositions de données sensibles et les ruptures de contrôle d'accès.
-- **Trafic Chiffré** : En production, l'usage du HTTPS via un reverse-proxy est obligatoire pour protéger les données en transit.
-- **Politique CORS** : Un cloisonnement strict assure que seul le domaine officiel de DataShare peut interagir avec l'API.
-
----
-
-## 🛠️ Vigilance & Maintenance
-
-La sécurité est un processus continu. Nous recommandons et utilisons :
-- **Audit de dépendances** : Utilisation régulière de `npm audit` pour corriger les vulnérabilités Tierces.
-- **Analyse Statique** : Scans via Snyk pour détecter les failles dans le code et les images Docker.
+Je vérifie régulièrement les dépendances avec des outils standards pour éviter les failles connues :
+- `npm audit` pour les bibliothèques.
+- Snyk pour scanner le code et les images Docker.
 
 ```bash
-# Pour vérifier la santé de l'écosystème
+# Pour vérifier les dépendances
 cd backend && npm audit
 cd frontend && npm audit
 ```
 
----
-
-*La sécurité est tout ce qui se dresse entre vos données et le reste du monde. Nous prenons ce rôle très au sérieux.*
+La sécurité est une priorité constante pour garantir que vos fichiers restent privés. 🛡️

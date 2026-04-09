@@ -1,43 +1,23 @@
-# ⚡ Expérience & Vitesse — Rapport de Performance DataShare
+# Performance sur DataShare
 
-La performance n'est pas qu'une question de chiffres, c'est la politesse que nous devons à nos utilisateurs. Ce document définit nos standards d'excellence pour une expérience fluide.
+L'objectif est que l'application soit rapide et agréable à utiliser, sans temps d'attente inutile.
 
----
+## Objectifs pour l'interface (Frontend)
 
-## 🎨 Excellence Interface (Frontend)
+On utilise Lighthouse pour vérifier que tout tourne bien. Les cibles sont simples :
+- Un temps de chargement initial de moins d'une seconde.
+- Une interface fluide qui répond immédiatement aux clics.
+- Un bon score SEO pour que le projet soit bien indexé.
 
-Nous visons le score parfait sur Lighthouse pour garantir que DataShare reste accessible et rapide sur tous les appareils.
+## Performances du serveur (API)
 
-| Métrique Lighthouse | Objectif | Pourquoi c'est important |
-| :--- | :--- | :--- |
-| **Performance** | +90 | Pour une réactivité instantanée. |
-| **Accessibilité** | 100 | Pour que personne ne soit laissé de côté. |
-| **Bonnes Pratiques** | 100 | Pour un Web sain et sécurisé. |
-| **SEO** | 100 | Pour une indexation optimale. |
+Le backend est optimisé pour répondre vite :
+- Les connexions se font en moins de 200ms.
+- Les fichiers sont envoyés le plus vite possible selon votre connexion internet.
+- On a ajouté des index dans la base de données pour que les recherches de fichiers soient instantanées.
 
-### Seuils de Rétention
-- **First Contentful Paint (FCP)** : < 1.0s (L'utilisateur voit que ça charge tout de suite).
-- **Largest Contentful Paint (LCP)** : < 2.0s (Le contenu principal est prêt).
-- **Total Blocking Time (TBT)** : < 150ms (L'interface répond sans délai).
+## Ce qui a été fait pour optimiser
 
----
-
-## ⚡ Réactivité Serveur (API)
-
-Notre backend est optimisé pour traiter vos demandes en un clin d'œil :
-- **Authentification** : < 200ms (Compromis optimal entre sécurité bcrypt et vitesse).
-- **Indexation** : Nous utilisons des index PostgreSQL sur les champs critiques pour des recherches en millisecondes.
-- **Capacité d'Upload** : L'architecture NestJS + Multer permet de saturer la bande passante disponible (jusqu'à 1 Gbit/s sur des serveurs dédiés).
-
----
-
-## 🚀 Optimisations Déjà en Place
-
-Nous n'avons pas seulement des objectifs, nous avons des solutions :
-- **Builds Multi-Stage** : Nos images Docker sont passées de 1.2 Go à ~200 Mo, accélérant les déploiements et réduisant l'usage mémoire.
-- **Chargement Différé (Lazy Loading)** : Seuls les composants nécessaires à la page actuelle sont chargés par le navigateur.
-- **Indexation de Base** : Les recherches par `download_token` sont instantanées, quelle que soit la taille de la base.
-
----
-
-*La vitesse est la fondation sur laquelle repose le plaisir d'utiliser un outil.*
+- **Docker** : Les images sont les plus légères possible pour gagner de la place et de la vitesse au démarrage.
+- **Code** : On ne charge que les parties de l'application dont l'utilisateur a besoin sur le moment (Lazy Loading).
+- **Base de données** : Les requêtes sont optimisées pour éviter de ralentir quand il y a beaucoup de fichiers. ⚡

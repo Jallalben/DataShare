@@ -1,48 +1,28 @@
-# 🌱 Guide de Pérennité & Maintenance — DataShare
+# Maintenance de DataShare
 
-DataShare est conçu pour durer. Ce document décrit comment entretenir la plateforme pour qu'elle reste performante, sécurisée et à jour au fil du temps.
+Quelques notes sur comment garder le projet à jour et en bonne santé.
 
----
+## Mise à jour des dépendances
 
-## 📅 Cycle de Vie des Dépendances
+- On vérifie régulièrement les dépendances avec `npm audit`.
+- Les petites mises à jour se font au fil de l'eau.
+- Tous les trois mois environ, on fait une revue plus complète pour mettre à jour les gros frameworks (NestJS, React).
 
-Une application en bonne santé est une application dont les fondations sont solides.
-- **Audit Hebdomadaire** : Un coup d'œil rapide via `npm audit` permet d'anticiper les vulnérabilités.
-- **Mises à jour Mineures** : Nous faisons confiance à l'automatisation (Dependabot) pour garder les bibliothèques à jour.
-- **Revue Trimestrielle** : Un moment dédié pour les mises à jour majeures (NestJS, React, TypeORM), garantissant que nous profitons des dernières avancées technologiques.
+## Déploiement
 
----
+Pour mettre à jour le projet en production avec Docker, c'est assez simple :
+1. Récupérer les dernières images : `docker compose pull`
+2. Relancer les services : `docker compose up -d --build --no-deps backend`
 
-## 🚀 Déploiement & Continuité de Service
+## Sauvegardes (Backups)
 
-La mise à jour de DataShare doit être une expérience transparente pour vos utilisateurs.
-
-### Stratégie Docker
-Pour déployer une nouvelle version en minimisant les interruptions :
-1. **Récupération** : `docker compose pull`
-2. **Relance Ciblée** : `docker compose up -d --build --no-deps backend`
-
----
-
-## 💾 Assurance Données : Les Backups
-
-Vos données et celles de vos utilisateurs sont précieuses. Nous recommandons une stratégie de sauvegarde à deux niveaux :
-- **Base de données** : Snapshot hebdomadaire pour prévenir toute erreur de manipulation.
-- **Fichiers Uploadés** : Synchronisation quotidienne vers un stockage distant (S3, Glacier ou serveur de backup).
-
+Il est conseillé de sauvegarder la base de données de temps en temps, surtout avant de grosses mises à jour :
 ```bash
-# Sauvegarde rapide de la base de données
 docker compose exec postgres pg_dump -U datashare datashare > backups/db_$(date +%F).sql
 ```
+Pour les fichiers dans `uploads/`, une simple copie sur un autre serveur ou un stockage cloud une fois par jour suffit.
 
----
+## En cas de problème
 
-## 🚨 Plan de Continuité (PRA)
-
-Nous avons anticipé les imprévus pour que vous n'ayez pas à le faire :
-- **Persistance Garantie** : Les données PostgreSQL sont stockées dans un volume Docker dédié (`postgres_data`), les protégeant des redémarrages de conteneurs.
-- **Gestion de l'Archive** : Pour éviter la saturation du disque, un module spécial (`TasksModule`) surveille la taille du stockage et purge automatiquement les fichiers obsolètes.
-
----
-
-*Prendre soin du code aujourd'hui, c'est garantir sa fiabilité pour demain.*
+- Si la base de données redémarre, les données ne sont pas perdues grâce au volume Docker persistant.
+- Si le disque se remplit, vérifiez les tâches automatiques qui purgent les fichiers expirés. 🔧
