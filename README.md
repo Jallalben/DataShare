@@ -11,53 +11,7 @@ DataShare est une application web permettant aux utilisateurs de téléverser de
 
 ## 2. Architecture Technique
 
-```mermaid
-graph TD
-    subgraph Client ["Client (Browser)"]
-        Navigator[Utilisateur / Navigateur]
-    end
-
-    subgraph Docker ["Docker Compose Boundary"]
-        Nginx["Nginx (Reverse Proxy & Static Server)"]
-        React["React + Vite (Port 3000)"]
-        
-        subgraph Backend ["NestJS API (Port 3001)"]
-            API[API Entry]
-            Auth[AuthModule]
-            Files[FilesModule]
-            Tasks[TasksModule]
-        end
-
-        DB[(PostgreSQL Port 5432)]
-        Disk[Stockage local /uploads]
-        Vol[Persistent Storage Docker Volumes]
-    end
-
-    %% Flux Client
-    Navigator -- "HTTP" --> Nginx
-    Nginx -- "Serve CSS/JS/HTML" --> React
-    React -- "REST API / JWT Auth" --> API
-
-    %% Flux Backend
-    API --- Auth
-    API --- Files
-    
-    Auth -- "User Registry" --> DB
-    Files -- "Metadata" --> DB
-    Files -- "Physical Upload" --> Disk
-    
-    %% Flux Purge
-    Tasks -- "Query Expired" --> DB
-    Tasks -- "Cleanup Files" --> Disk
-
-    %% Persistance
-    DB ==> Vol
-    Disk ==> Vol
-
-    %% Healthchecks
-    Health[GET /api/health] -.-> API
-    Ready[pg_isready] -.-> DB
-```
+![Architecture Technique](./architecture.png)
 
 ## 3. Choix Technologiques
 | Brique | Choix | Pourquoi ce choix |
