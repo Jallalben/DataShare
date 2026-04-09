@@ -60,9 +60,20 @@ export const Button: React.FC<ButtonProps> = ({
           transform: translateY(-2px);
         }
 
+        .btn-black {
+          background: #1A1A1A;
+          color: white;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        .btn-black:hover:not(:disabled) {
+          background: #000000;
+          transform: translateY(-2px);
+          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
         .btn-secondary {
           background: white;
-          color: var(--orange);
+          color: #000000;
           box-shadow: var(--shadow-premium);
         }
         .btn-secondary:hover:not(:disabled) {

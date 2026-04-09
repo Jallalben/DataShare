@@ -51,12 +51,10 @@ const Login: React.FC = () => {
           width: 100%;
           max-width: 440px;
           padding: 3rem;
-          background: var(--bg-glass);
-          backdrop-filter: blur(12px);
-          -webkit-backdrop-filter: blur(12px);
+          background: #FFFFFF;
           border-radius: var(--radius-figma);
-          box-shadow: var(--shadow-premium);
-          border: 1px solid rgba(255, 255, 255, 0.4);
+          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+          border: 1px solid rgba(0, 0, 0, 0.04);
           animation: cardAppear 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
         @keyframes cardAppear {
@@ -66,7 +64,7 @@ const Login: React.FC = () => {
         .auth-logo {
           font-size: 2rem;
           font-weight: 800;
-          color: var(--orange);
+          color: #000000;
           text-align: center;
           margin-bottom: 0.5rem;
           letter-spacing: -0.04em;
@@ -76,7 +74,7 @@ const Login: React.FC = () => {
           font-weight: 700;
           margin-bottom: 0.75rem;
           text-align: center;
-          color: var(--text-primary);
+          color: #000000;
         }
         .auth-subtitle {
           color: var(--text-secondary);

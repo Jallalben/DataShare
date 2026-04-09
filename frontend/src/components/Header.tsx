@@ -6,20 +6,17 @@ import { useAuth } from '../context/AuthContext';
 export const Header: React.FC = () => {
   const { isAuthenticated, logout } = useAuth();
   const location = useLocation();
-  const isAuthPage = ['/login', '/register'].includes(location.pathname);
-
-  // Si on est sur une page d'auth, on ne montre pas le header global (car le logo est dans la card)
-  if (isAuthPage) return null;
 
   return (
     <header className="header">
       <style>{`
         .header {
           padding: 1.5rem 0;
-          position: sticky;
+          position: fixed;
           top: 0;
+          left: 0;
+          right: 0;
           z-index: 100;
-          transition: var(--transition);
         }
         .header-content {
           display: flex;
@@ -27,16 +24,11 @@ export const Header: React.FC = () => {
           justify-content: space-between;
         }
         .logo {
-          font-size: 1.75rem;
+          font-size: 1.5rem;
           font-weight: 800;
-          color: white;
+          color: #000000;
           letter-spacing: -0.04em;
           text-decoration: none;
-          transition: var(--transition);
-        }
-        .logo:hover {
-          opacity: 0.9;
-          transform: scale(1.02);
         }
         .nav {
           display: flex;
@@ -48,16 +40,13 @@ export const Header: React.FC = () => {
         <Link to="/" className="logo">DataShare</Link>
         <div className="nav">
           {isAuthenticated ? (
-            <Button variant="outline" size="sm" onClick={logout}>Se déconnecter</Button>
+            <Link to="/myspace" style={{ textDecoration: 'none' }}>
+              <Button variant="black" size="sm">Mon espace</Button>
+            </Link>
           ) : (
-            <>
-              <Link to="/login" style={{ textDecoration: 'none' }}>
-                <Button variant="ghost" size="sm">Connexion</Button>
-              </Link>
-              <Link to="/register" style={{ textDecoration: 'none' }}>
-                <Button variant="secondary" size="sm">S'inscrire</Button>
-              </Link>
-            </>
+            <Link to="/login" style={{ textDecoration: 'none' }}>
+              <Button variant="black" size="sm">Se connecter</Button>
+            </Link>
           )}
         </div>
       </div>
