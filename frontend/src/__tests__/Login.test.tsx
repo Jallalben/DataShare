@@ -4,9 +4,12 @@ import { MemoryRouter } from 'react-router-dom'
 import Login from '../pages/Login'
 import { AuthContext } from '../context/AuthContext'
 
-// On remplace axios pour ne pas faire de vraies requêtes
-vi.mock('axios')
-import axios from 'axios'
+vi.mock('../services/api', () => ({
+  apiClient: { post: vi.fn(), get: vi.fn() },
+  API_URL: 'http://localhost:3001/api',
+  setAuthToken: vi.fn(),
+}))
+import { apiClient } from '../services/api'
 
 // Un faux contexte d'authentification pour les tests
 const mockAuthContext = {
@@ -43,7 +46,7 @@ describe('Page de connexion', () => {
   })
 
   it('affiche un message d\'erreur si le serveur rejette la connexion', async () => {
-    vi.mocked(axios.post).mockRejectedValueOnce({
+    vi.mocked(apiClient.post).mockRejectedValueOnce({
       response: { data: { message: 'Identifiants incorrects' } },
     })
     renderLogin()

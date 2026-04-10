@@ -4,8 +4,12 @@ import { MemoryRouter } from 'react-router-dom'
 import Register from '../pages/Register'
 import { AuthContext } from '../context/AuthContext'
 
-vi.mock('axios')
-import axios from 'axios'
+vi.mock('../services/api', () => ({
+  apiClient: { post: vi.fn(), get: vi.fn() },
+  API_URL: 'http://localhost:3001/api',
+  setAuthToken: vi.fn(),
+}))
+import { apiClient } from '../services/api'
 
 const mockAuthContext = {
   isAuthenticated: false,
@@ -61,7 +65,7 @@ describe("Page d'inscription", () => {
   })
 
   it("appelle l'API et redirige si l'inscription réussit", async () => {
-    vi.mocked(axios.post).mockResolvedValueOnce({ data: {} })
+    vi.mocked(apiClient.post).mockResolvedValueOnce({ data: {} })
     renderRegister()
     fireEvent.change(screen.getByPlaceholderText('votre@email.com'), {
       target: { value: 'nouveau@example.com' },
@@ -71,7 +75,7 @@ describe("Page d'inscription", () => {
     fireEvent.change(confirmField, { target: { value: 'motdepasse123' } })
     fireEvent.click(screen.getByRole('button', { name: /s'inscrire/i }))
     await waitFor(() => {
-      expect(axios.post).toHaveBeenCalledWith(
+      expect(apiClient.post).toHaveBeenCalledWith(
         expect.stringContaining('/auth/register'),
         expect.objectContaining({ email: 'nouveau@example.com' })
       )
