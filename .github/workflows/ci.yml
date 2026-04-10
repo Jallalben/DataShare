@@ -62,9 +62,14 @@ jobs:
           --health-retries 5
 
     env:
-      DATABASE_URL: postgresql://datashare:datashare_test@localhost:5432/datashare_test
+      DB_HOST: localhost
+      DB_PORT: 5432
+      DB_USER: datashare
+      DB_PASSWORD: datashare_test
+      DB_NAME: datashare_test
       JWT_SECRET: test_secret_key_for_ci
       JWT_EXPIRATION: 3600s
+      NODE_ENV: test
 
     steps:
       - name: Checkout du code
@@ -105,7 +110,7 @@ jobs:
 
       - name: Installation des dépendances
         working-directory: frontend
-        run: npm ci
+        run: npm install
 
       - name: Lancement des tests
         working-directory: frontend
