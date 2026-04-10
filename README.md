@@ -93,7 +93,7 @@ cd backend && npm run test:cov
 # Intégration E2E (backend)
 cd backend && npm run test:e2e
 
-# Unitaires (frontend) — à venir
+# Unitaires (frontend)
 cd frontend && npm run test
 
 # E2E Cypress — à venir

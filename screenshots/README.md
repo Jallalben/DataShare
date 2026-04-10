@@ -5,7 +5,9 @@ Chaque entrée documente l'URL, l'état visuel attendu, et le tag Git correspond
 
 ---
 
-## Accueil — `Screenshot_Main_Frame.png`
+## Phase 1 — Authentification (US03/US04) — `v1.0-phase1-done`
+
+### Accueil — `Screenshot_Main_Frame.png`
 
 > Header fixe · Logo DataShare noir · Bouton "Se connecter" pill noir · Question centrale · Portail circulaire Cloud · Fond dégradé Sunset
 
@@ -16,7 +18,7 @@ Chaque entrée documente l'URL, l'état visuel attendu, et le tag Git correspond
 
 ---
 
-## Connexion — `Screenshot_Login.png`
+### Connexion — `Screenshot_Login.png`
 
 > Carte blanche solide · radius 24px · Inputs Figma · Bouton orange gradient · Lien S'inscrire
 
@@ -27,7 +29,7 @@ Chaque entrée documente l'URL, l'état visuel attendu, et le tag Git correspond
 
 ---
 
-## Inscription — `Screenshot_register.png`
+### Inscription — `Screenshot_register.png`
 
 > Même structure que la page de connexion · 3 champs (email, mdp, confirmation) · Bouton orange
 
@@ -35,8 +37,6 @@ Chaque entrée documente l'URL, l'état visuel attendu, et le tag Git correspond
 
 **URL** : `http://localhost:3000/register`  
 **Design** : Conforme au Figma "Desktop-7" — aligné avec la page de connexion.
-
----
 
 ---
 
@@ -50,8 +50,6 @@ Chaque entrée documente l'URL, l'état visuel attendu, et le tag Git correspond
 
 **URL** : `http://localhost:3000/` → connecté → upload réussi  
 **État** : succès, lien `{origin}/download/{token}` visible et copiable.
-
----
 
 ---
 

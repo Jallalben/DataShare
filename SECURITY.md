@@ -6,10 +6,10 @@ Ce document explique comment les données sont protégées sur la plateforme.
 
 Pour qu'un partage de fichiers soit sûr, j'ai implémenté plusieurs couches de protection :
 
-- **Chiffrement des mots de passe** : On utilise `bcrypt` avec 10 rounds. Les mots de passe ne sont jamais sauvés en clair, donc même en cas d'accès à la base, ils restent protégés.
-- **Accès sécurisé** : Les échanges entre le front et le back se font via des tokens JWT qui expirent après 24h.
-- **Liens de téléchargement** : Chaque lien généré est un UUID v4 unique. C'est impossible à deviner en essayant des combinaisons au hasard.
-- **Limites d'envoi** : On peut limiter la taille des fichiers (par défaut 1 Go) et les supprimer automatiquement après expiration pour ne pas remplir le disque.
+- **Chiffrement des mots de passe** : On utilise `bcrypt` avec 12 rounds. Les mots de passe ne sont jamais sauvegardés en clair — même en cas d'accès à la base, ils restent illisibles.
+- **Accès sécurisé** : Les échanges entre le front et le back se font via des tokens JWT stockés côté client, qui expirent automatiquement après 24h.
+- **Liens de téléchargement** : Chaque lien généré est un UUID v4 unique. Il est impossible à deviner par force brute.
+- **Limites d'envoi** : La taille des fichiers est limitée à 50 Mo par défaut. Les fichiers peuvent être supprimés automatiquement après expiration pour ne pas saturer le disque.
 
 ## Outils utilisés pour la vérification
 

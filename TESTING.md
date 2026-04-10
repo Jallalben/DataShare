@@ -69,19 +69,23 @@ Le même standard est appliqué à chaque phase avant de créer le tag Git et de
 
 ---
 
-### ⏳ Phase 3 — Téléchargement & partage (US02)
+### ✅ Phase 3 — Téléchargement & partage (US02)
 
 **Backend — Unitaires**
-- Génération d'un lien UUID v4.
-- Lien expiré → erreur 410 Gone.
+- `files.service.spec.ts` : `findByToken` valide → retourne le fichier, token inconnu → null.
+- Lien expiré → `GoneException` 410.
 
 **Backend — Intégration**
-- `GET /api/files/:uuid` → 200 + téléchargement.
-- `GET /api/files/:uuid` (expiré) → 410.
+- `GET /api/files/info/:token` → 200 + métadonnées JSON (sans JWT).
+- `GET /api/files/info/:token` (token inconnu) → 404.
+- `GET /api/files/download/:token` → 200 + stream fichier avec `Content-Disposition: attachment`.
+- `GET /api/files/download/:token` (expiré) → 410.
 
-**Frontend — E2E (Cypress)**  
-- L'utilisateur copie le lien → accès sans authentification → téléchargement déclenché.
-- Lien expiré → page d'erreur affichée.
+**Frontend — E2E (Cypress)**
+- Accès à `/download/:token` valide → nom du fichier + bouton "Télécharger" visible.
+- Clic "Télécharger" → téléchargement déclenché sans authentification.
+- Token inconnu → état "Fichier introuvable" affiché.
+- Token expiré → état "Lien expiré" affiché.
 
 ---
 
@@ -93,7 +97,7 @@ Le même standard est appliqué à chaque phase avant de créer le tag Git et de
 3. Tests d'intégration (Supertest)    → npm run test:e2e
 4. Tests E2E Cypress                  → npx cypress run
 5. Screenshots dans screenshots/README.md
-6. Commit conventionnel               → feat/fix/test/docs: [USxx] ...
+6. Commit conventionnel               → feat/fix/test/docs: ...
 7. Tag Git                            → vX.0-phaseX-done
 8. Push par l'utilisateur             → git push origin main --tags
 ```
