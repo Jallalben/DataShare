@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import axios from 'axios';
+import { setAuthToken } from '../services/api';
 
 interface User {
   id: string;
@@ -29,7 +29,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     if (savedToken && savedUser) {
       setToken(savedToken);
       setUser(JSON.parse(savedUser));
-      axios.defaults.headers.common['Authorization'] = `Bearer ${savedToken}`;
+      setAuthToken(savedToken);
     }
     setLoading(false);
   }, []);
@@ -39,7 +39,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setUser(newUser);
     localStorage.setItem('datashare_token', newToken);
     localStorage.setItem('datashare_user', JSON.stringify(newUser));
-    axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
+    setAuthToken(newToken);
   };
 
   const logout = () => {
@@ -47,7 +47,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     setUser(null);
     localStorage.removeItem('datashare_token');
     localStorage.removeItem('datashare_user');
-    delete axios.defaults.headers.common['Authorization'];
+    setAuthToken(null);
   };
 
   return (

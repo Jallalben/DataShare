@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import axios from 'axios';
+import { apiClient } from '../services/api';
 import { Input } from '../components/Input';
 import { Button } from '../components/Button';
 import { Callout } from '../components/Callout';
@@ -27,7 +27,7 @@ const Login: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.post('http://localhost:3001/api/auth/login', data);
+      const response = await apiClient.post('/auth/login', data);
       login(response.data.access_token, response.data.user);
       navigate('/');
     } catch (err: any) {

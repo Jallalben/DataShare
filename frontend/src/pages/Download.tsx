@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import axios from 'axios'
+import { apiClient, API_URL } from '../services/api'
 
 interface FileInfo {
   originalName: string
@@ -9,8 +9,6 @@ interface FileInfo {
   createdAt: string
   expiresAt: string | null
 }
-
-const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001/api'
 
 function formatBytes(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`
@@ -24,8 +22,8 @@ export default function Download() {
   const [status, setStatus] = useState<'loading' | 'ready' | 'not_found' | 'expired'>('loading')
 
   useEffect(() => {
-    axios
-      .get<FileInfo>(`${API_URL}/files/info/${token}`)
+    apiClient
+      .get<FileInfo>(`/files/info/${token}`)
       .then(({ data }) => {
         setFileInfo(data)
         setStatus('ready')

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { apiClient } from '../services/api';
 import { Input } from '../components/Input';
 import { Button } from '../components/Button';
 import { Callout } from '../components/Callout';
@@ -24,7 +24,7 @@ const Register: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      await axios.post('http://localhost:3001/api/auth/register', {
+      await apiClient.post('/auth/register', {
         email: data.email,
         password: data.password,
       });

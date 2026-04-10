@@ -1,5 +1,6 @@
 import React, { useRef, useState } from 'react';
 import axios from 'axios';
+import { apiClient, API_URL } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { Modal } from './Modal';
 
@@ -16,8 +17,6 @@ interface UploadModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
-
-const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001/api';
 
 function formatBytes(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`;
@@ -88,8 +87,8 @@ export const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => 
     setProgress(0);
 
     try {
-      const { data } = await axios.post<UploadResult>(
-        `${API_URL}/files/upload`,
+      const { data } = await apiClient.post<UploadResult>(
+        '/files/upload',
         formData,
         {
           headers: { Authorization: `Bearer ${token}` },
