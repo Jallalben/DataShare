@@ -24,7 +24,7 @@ git clone https://github.com/TON_USERNAME/DataShare.git
 git checkout -b feat/nom-de-ta-feature
 
 # 3. Développe, teste, commite
-git commit -m "feat: [US01] ajouter la zone de dépôt drag & drop"
+git commit -m "feat: ajouter la zone de dépôt drag & drop"
 
 # 4. Pousse et ouvre une Pull Request
 git push origin feat/nom-de-ta-feature
@@ -37,7 +37,7 @@ git push origin feat/nom-de-ta-feature
 On utilise les **Conventional Commits**. Le format est le suivant :
 
 ```
-<type>(<scope>): [USxx] description courte
+<type>(<scope>): description courte
 ```
 
 | Type | Quand l'utiliser |
@@ -52,10 +52,10 @@ On utilise les **Conventional Commits**. Le format est le suivant :
 
 **Exemples concrets :**
 ```bash
-feat(auth): [US03] implement JWT login endpoint
-fix(upload): [US01] handle large file size validation error
-style(ui): [UI] align login card with Figma spec
-test(auth): [US03] add integration tests for register endpoint
+feat(auth): implement JWT login endpoint
+fix(upload): handle large file size validation error
+style(ui): align login card with Figma spec
+test(auth): add integration tests for register endpoint
 ```
 
 ---
@@ -116,7 +116,7 @@ Avant de soumettre une Pull Request, vérifie que tu as bien :
 - [ ] Vérifié que tous les tests passent (`npm run test`)
 - [ ] Ajouté une capture d'écran dans `screenshots/` si c'est une feature visuelle
 - [ ] Mis à jour le `CHANGELOG.md`
-- [ ] Utilisé un commit conventionnel avec la référence à l'US
+- [ ] Utilisé un commit conventionnel
 
 ---
 

@@ -28,7 +28,7 @@ Le même standard est appliqué à chaque phase avant de créer le tag Git et de
 | **Supertest** | Backend — Intégration E2E | `cd backend && npm run test:e2e` | ⚙️ En place (à enrichir) |
 | **Vitest** | Frontend — Unitaires | `cd frontend && npm run test` | ✅ Opérationnel |
 | **Cypress** | E2E — Navigateur complet | `npx cypress run` | ❌ À installer |
-| **GitHub Actions** | CI/CD — Automatisation | Push sur `main` | ❌ À configurer |
+| **GitHub Actions** | CI/CD — Automatisation | Push sur `main` | ✅ Opérationnel |
 
 ---
 

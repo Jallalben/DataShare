@@ -40,15 +40,45 @@ Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/) et le ve
 
 ---
 
+## [2.0.0] — 2026-04-10 · `v1.0-phase2-done`
+
+### ✨ Ajouté
+- **Téléversement de fichiers (US01)**
+  - Endpoint `POST /api/files/upload` protégé par JWT
+  - Stockage sur disque via Multer (limite 50 Mo)
+  - Entité `File` avec `downloadToken` UUID unique et `expiresAt` pour la future expiration
+  - Modal d'upload avec drag & drop, barre de progression et état succès avec lien copiable
+  - Redirection vers `/login` si l'utilisateur tente d'uploader sans être connecté
+
+### 🔧 Corrigé
+- `VITE_API_URL` dans docker-compose complété avec le préfixe `/api`
+
+---
+
+## [3.0.0] — 2026-04-10 · `v1.0-phase3-done`
+
+### ✨ Ajouté
+- **Téléchargement & partage (US02)**
+  - Endpoint public `GET /api/files/info/:token` — métadonnées JSON (404/410)
+  - Endpoint public `GET /api/files/download/:token` — stream fichier avec `Content-Disposition: attachment`
+  - Page `/download/:token` avec états : prêt, introuvable, expiré
+  - Couche API centralisée `frontend/src/services/api.ts` — fin des URLs hardcodées
+
+---
+
 ## À venir
 
-### [2.0.0] — Phase 2 · Téléversement (US01)
-- Upload de fichiers via drag & drop
-- Stockage sécurisé avec Multer
-- Barre de progression et liste des fichiers dans "Mon espace"
-- Tests E2E Cypress pour le parcours d'upload
+### [4.0.0] — Phase 4 · Historique (US05)
+- Dashboard "Mon espace" avec liste des fichiers uploadés
+- Endpoint `GET /api/files/my` protégé par JWT
 
-### [3.0.0] — Phase 3 · Téléchargement & partage (US02)
-- Génération de liens UUID v4 temporaires
-- Page de téléchargement publique (sans authentification)
-- Expiration automatique et suppression des fichiers
+### [5.0.0] — Phase 5 · Suppression (US06)
+- Suppression d'un fichier depuis le dashboard
+- Endpoint `DELETE /api/files/:id` protégé par JWT
+
+### [6.0.0] — Phase 6 · Expiration automatique (US10)
+- Cron job de nettoyage des fichiers expirés
+
+### [7.0.0] — Phase 7 · Finalisation v1.0.0
+- Tests E2E Cypress complets
+- Tag de release `v1.0.0`
