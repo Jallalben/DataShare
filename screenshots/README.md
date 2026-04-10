@@ -53,6 +53,21 @@ Chaque entrée documente l'URL, l'état visuel attendu, et le tag Git correspond
 
 ---
 
+---
+
+## Phase 3 — Téléchargement & partage (US02) — `v1.0-phase3-done`
+
+### Page de téléchargement — `Screenshot_Download_Page.png`
+
+> Carte centrée · Icône téléchargement · Nom du fichier + poids · Bouton "Télécharger" noir · Lien retour accueil
+
+![Page de téléchargement](./Screenshot_Download_Page.png)
+
+**URL** : `http://localhost:3000/download/{token}` (lien copié depuis l'UploadModal)  
+**État** : fichier disponible, prêt au téléchargement.
+
+---
+
 ## Tokens de design
 
 | Élément | Valeur |
@@ -63,3 +78,4 @@ Chaque entrée documente l'URL, l'état visuel attendu, et le tag Git correspond
 | Bordure carte | `24px` (radius Figma) |
 | Phase 1 tag Git | `v1.0-phase1-done` |
 | Phase 2 tag Git | `v1.0-phase2-done` |
+| Phase 3 tag Git | `v1.0-phase3-done` |

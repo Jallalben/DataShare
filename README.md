@@ -22,6 +22,12 @@ L'idée de DataShare est de pouvoir envoyer un fichier rapidement, en ajoutant u
 
 ---
 
+### Phase 3 — Téléchargement & partage (US02)
+
+![Page de téléchargement](./screenshots/Screenshot_Download_Page.png)
+
+---
+
 ## Architecture technique
 
 ![Architecture Technique](./architecture.png)
@@ -104,7 +110,7 @@ npx cypress run
 |:---|:---|:---|:---|
 | **Phase 1** | Authentification (US03/US04) + Design Figma | ✅ Terminée | `v1.0-phase1-done` |
 | **Phase 2** | Téléversement de fichiers (US01) | ✅ Terminée | `v1.0-phase2-done` |
-| **Phase 3** | Téléchargement & partage (US02) | ⏳ À venir | - |
+| **Phase 3** | Téléchargement & partage (US02) | ✅ Terminée | `v1.0-phase3-done` |
 | **Phase 4** | Historique des fichiers (US05) | ⏳ À venir | - |
 | **Phase 5** | Suppression (US06) | ⏳ À venir | - |
 | **Phase 6** | Expiration automatique (US10) | ⏳ À venir | - |
