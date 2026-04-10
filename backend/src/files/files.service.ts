@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { join } from 'path';
 import { Repository } from 'typeorm';
 import { File } from './file.entity';
 
@@ -24,5 +25,13 @@ export class FilesService {
       downloadToken,
     });
     return this.filesRepository.save(fileEntity);
+  }
+
+  async findByToken(token: string): Promise<File | null> {
+    return this.filesRepository.findOne({ where: { downloadToken: token } });
+  }
+
+  getFilePath(filename: string): string {
+    return join(process.cwd(), 'uploads', filename);
   }
 }

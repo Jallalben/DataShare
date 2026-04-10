@@ -5,6 +5,7 @@ import { Footer } from './components/Footer'
 import { UploadModal } from './components/UploadModal'
 import Register from './pages/Register'
 import Login from './pages/Login'
+import Download from './pages/Download'
 import { AuthProvider, useAuth } from './context/AuthContext'
 import './App.css'
 
@@ -108,6 +109,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/download/:token" element={<Download />} />
           </Routes>
         </main>
         <Footer />

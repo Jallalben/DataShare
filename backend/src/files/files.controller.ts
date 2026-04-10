@@ -1,16 +1,22 @@
 import {
   Controller,
   Post,
+  Get,
+  Param,
+  Res,
   UseGuards,
   UseInterceptors,
   UploadedFile,
   Request,
   BadRequestException,
+  NotFoundException,
+  GoneException,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
+import type { Response } from 'express';
 import { FilesService } from './files.service';
 
 const multerOptions = {
@@ -27,11 +33,11 @@ const multerOptions = {
 };
 
 @Controller('files')
-@UseGuards(AuthGuard('jwt'))
 export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
   @Post('upload')
+  @UseGuards(AuthGuard('jwt'))
   @UseInterceptors(FileInterceptor('file', multerOptions))
   async uploadFile(
     @UploadedFile() file: Express.Multer.File,
@@ -51,5 +57,36 @@ export class FilesController {
       downloadToken: saved.downloadToken,
       createdAt: saved.createdAt,
     };
+  }
+
+  @Get('info/:token')
+  async getFileInfo(@Param('token') token: string) {
+    const file = await this.filesService.findByToken(token);
+    if (!file) throw new NotFoundException('Fichier introuvable');
+    if (file.expiresAt && new Date() > file.expiresAt) {
+      throw new GoneException('Ce lien a expiré');
+    }
+    return {
+      originalName: file.originalName,
+      size: Number(file.size),
+      mimetype: file.mimetype,
+      createdAt: file.createdAt,
+      expiresAt: file.expiresAt,
+    };
+  }
+
+  @Get('download/:token')
+  async downloadFile(
+    @Param('token') token: string,
+    @Res() res: Response,
+  ) {
+    const file = await this.filesService.findByToken(token);
+    if (!file) throw new NotFoundException('Fichier introuvable');
+    if (file.expiresAt && new Date() > file.expiresAt) {
+      throw new GoneException('Ce lien a expiré');
+    }
+
+    const filePath = this.filesService.getFilePath(file.filename);
+    res.download(filePath, file.originalName);
   }
 }
