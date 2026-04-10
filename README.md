@@ -8,14 +8,17 @@ L'idée de DataShare est de pouvoir envoyer un fichier rapidement, en ajoutant u
 
 ## Aperçu de l'interface
 
-### Accueil
-![Accueil](./screenshots/Screenshot_Main_Frame.png)
+### Phase 1 — Authentification
 
-### Connexion
-![Connexion](./screenshots/Screenshot_Login.png)
+| Accueil | Connexion | Inscription |
+|:---:|:---:|:---:|
+| ![Accueil](./screenshots/Screenshot_Main_Frame.png) | ![Connexion](./screenshots/Screenshot_Login.png) | ![Inscription](./screenshots/Screenshot_register.png) |
 
-### Inscription
-![Inscription](./screenshots/Screenshot_register.png)
+---
+
+### Phase 2 — Téléversement de fichiers (US01)
+
+![Fichier envoyé](./screenshots/Screenshot_Files_Sent.png)
 
 ---
 
@@ -100,8 +103,12 @@ npx cypress run
 | Phase | Contenu | Statut | Tag Git |
 |:---|:---|:---|:---|
 | **Phase 1** | Authentification (US03/US04) + Design Figma | ✅ Terminée | `v1.0-phase1-done` |
-| **Phase 2** | Téléversement de fichiers (US01) | 🔄 En cours | - |
+| **Phase 2** | Téléversement de fichiers (US01) | ✅ Terminée | `v1.0-phase2-done` |
 | **Phase 3** | Téléchargement & partage (US02) | ⏳ À venir | - |
+| **Phase 4** | Historique des fichiers (US05) | ⏳ À venir | - |
+| **Phase 5** | Suppression (US06) | ⏳ À venir | - |
+| **Phase 6** | Expiration automatique (US10) | ⏳ À venir | - |
+| **Phase 7** | Tests E2E Cypress + finalisation v1.0.0 | ⏳ À venir | - |
 
 ---
 

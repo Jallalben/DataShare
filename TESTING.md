@@ -26,7 +26,7 @@ Le même standard est appliqué à chaque phase avant de créer le tag Git et de
 | **Jest** | Backend — Unitaires | `cd backend && npm run test` | ✅ Opérationnel |
 | **Jest Coverage** | Backend — Couverture | `cd backend && npm run test:cov` | ✅ Opérationnel |
 | **Supertest** | Backend — Intégration E2E | `cd backend && npm run test:e2e` | ⚙️ En place (à enrichir) |
-| **Vitest** | Frontend — Unitaires | `cd frontend && npm run test` | ❌ À installer |
+| **Vitest** | Frontend — Unitaires | `cd frontend && npm run test` | ✅ Opérationnel |
 | **Cypress** | E2E — Navigateur complet | `npx cypress run` | ❌ À installer |
 | **GitHub Actions** | CI/CD — Automatisation | Push sur `main` | ❌ À configurer |
 
@@ -51,18 +51,21 @@ Le même standard est appliqué à chaque phase avant de créer le tag Git et de
 
 ---
 
-### 🔄 Phase 2 — Téléversement (US01) *(en cours)*
+### ✅ Phase 2 — Téléversement (US01)
 
 **Backend — Unitaires**
-- `files.service.spec.ts` : upload valide → fichier créé en DB, fichier trop lourd → exception.
+- `files.service.spec.ts` : upload valide → fichier créé en DB avec `downloadToken` UUID unique.
 
 **Backend — Intégration**
-- `POST /api/files/upload` → 201 + metadata fichier.
-- `POST /api/files/upload` sans token → 401.
+- `POST /api/files/upload` (avec JWT) → 201 + `{ id, originalName, size, mimetype, downloadToken, createdAt }`.
+- `POST /api/files/upload` sans token → 401 Unauthorized.
+- `POST /api/files/upload` sans fichier → 400 Bad Request.
 
 **Frontend — E2E (Cypress)**  
-- Dépôt d'un fichier via drag & drop → apparaît dans la liste.
-- Upload depuis le bouton → barre de progression visible.
+- Clic sur le portail sans être connecté → redirection `/login`.
+- Clic sur le portail connecté → modal d'upload s'ouvre.
+- Drag & drop d'un fichier → nom + poids affichés · bouton "Envoyer" activé.
+- Upload → barre de progression → état succès avec lien copiable.
 
 ---
 

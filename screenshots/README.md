@@ -1,6 +1,7 @@
 # Screenshots — DataShare Frontend
 
-Captures d'écran de référence prises après finalisation de la **Phase 1 (US03 + US04 + Refonte Figma)**.
+Captures d'écran de référence prises après finalisation de chaque phase.  
+Chaque entrée documente l'URL, l'état visuel attendu, et le tag Git correspondant.
 
 ---
 
@@ -37,6 +38,21 @@ Captures d'écran de référence prises après finalisation de la **Phase 1 (US0
 
 ---
 
+---
+
+## Phase 2 — Téléversement (US01) — `v1.0-phase2-done`
+
+### Fichier envoyé — `Screenshot_Files_Sent.png`
+
+> Icône check vert · Nom du fichier + poids · Lien de partage avec bouton "Copier"
+
+![Fichier envoyé](./Screenshot_Files_Sent.png)
+
+**URL** : `http://localhost:3000/` → connecté → upload réussi  
+**État** : succès, lien `{origin}/download/{token}` visible et copiable.
+
+---
+
 ## Tokens de design
 
 | Élément | Valeur |
@@ -45,4 +61,5 @@ Captures d'écran de référence prises après finalisation de la **Phase 1 (US0
 | Dégradé fond | `#FF7E5F` → `#FEB47B` (Sunset) |
 | Texte principal | `#000000` |
 | Bordure carte | `24px` (radius Figma) |
-| Tag Git | `v1.0-phase1-done` |
+| Phase 1 tag Git | `v1.0-phase1-done` |
+| Phase 2 tag Git | `v1.0-phase2-done` |
