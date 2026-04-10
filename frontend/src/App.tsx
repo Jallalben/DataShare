@@ -1,15 +1,29 @@
-import { Routes, Route, Link } from 'react-router-dom'
+import { useState } from 'react'
+import { Routes, Route, Link, useNavigate } from 'react-router-dom'
 import { Header } from './components/Header'
 import { Footer } from './components/Footer'
-import { Button } from './components/Button'
+import { UploadModal } from './components/UploadModal'
 import Register from './pages/Register'
 import Login from './pages/Login'
-import { AuthProvider } from './context/AuthContext'
-import heroImg from './assets/hero.png'
+import { AuthProvider, useAuth } from './context/AuthContext'
 import './App.css'
 
 function Home() {
+  const { isAuthenticated } = useAuth()
+  const navigate = useNavigate()
+  const [uploadOpen, setUploadOpen] = useState(false)
+
+  const handleUploadClick = () => {
+    if (!isAuthenticated) {
+      navigate('/login')
+    } else {
+      setUploadOpen(true)
+    }
+  }
+
   return (
+    <>
+    <UploadModal isOpen={uploadOpen} onClose={() => setUploadOpen(false)} />
     <section className="hero-section">
       <style>{`
         .hero-section {
@@ -72,7 +86,7 @@ function Home() {
       
       <h1 className="hero-title">Tu veux partager un fichier ?</h1>
       
-      <div className="upload-portal">
+      <div className="upload-portal" onClick={handleUploadClick}>
         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M17.5 19c.7 0 1.3-.2 1.8-.7s.7-1.1.7-1.8c0-1.3-1-2.4-2.2-2.5C17.4 11 15 9 12 9c-2.3 0-4.3 1.2-5.4 3.1C5.4 12.4 4 13.5 4 15.5c0 1.9 1.6 3.5 3.5 3.5h10Z"/>
           <path d="M12 13v6"/>
@@ -80,6 +94,7 @@ function Home() {
         </svg>
       </div>
     </section>
+    </>
   )
 }
 

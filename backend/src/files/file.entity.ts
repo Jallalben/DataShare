@@ -1,0 +1,43 @@
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+  ManyToOne,
+  JoinColumn,
+} from 'typeorm';
+import { User } from '../users/user.entity';
+
+@Entity('files')
+export class File {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
+
+  @Column()
+  originalName: string;
+
+  @Column()
+  filename: string;
+
+  @Column()
+  mimetype: string;
+
+  @Column('bigint')
+  size: number;
+
+  @ManyToOne(() => User, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'userId' })
+  user: User;
+
+  @Column()
+  userId: string;
+
+  @Column({ unique: true })
+  downloadToken: string;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @Column({ type: 'timestamptz', nullable: true })
+  expiresAt: Date | null;
+}
