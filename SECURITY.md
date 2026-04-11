@@ -1,26 +1,32 @@
-# Sécurité sur DataShare
+# Sécurité — DataShare
 
 Ce document explique comment les données sont protégées sur la plateforme.
 
-## Ce qui est mis en place
+---
 
-Pour qu'un partage de fichiers soit sûr, j'ai implémenté plusieurs couches de protection :
+## Ce qui est en place
 
-- **Chiffrement des mots de passe** : On utilise `bcrypt` avec 12 rounds. Les mots de passe ne sont jamais sauvegardés en clair — même en cas d'accès à la base, ils restent illisibles.
-- **Accès sécurisé** : Les échanges entre le front et le back se font via des tokens JWT stockés côté client, qui expirent automatiquement après 24h.
-- **Liens de téléchargement** : Chaque lien généré est un UUID v4 unique. Il est impossible à deviner par force brute.
-- **Limites d'envoi** : La taille des fichiers est limitée à 50 Mo par défaut. Les fichiers peuvent être supprimés automatiquement après expiration pour ne pas saturer le disque.
+Les mots de passe ne sont jamais stockés en clair. J'utilise bcrypt avec 12 rounds — même en cas d'accès direct à la base de données, les mots de passe restent illisibles.
 
-## Outils utilisés pour la vérification
+Les sessions sont gérées par des tokens JWT qui expirent après 24h. Le token est stocké côté client et envoyé dans l'en-tête `Authorization` à chaque requête protégée.
 
-Je vérifie régulièrement les dépendances avec des outils standards pour éviter les failles connues :
-- `npm audit` pour les bibliothèques.
-- Snyk pour scanner le code et les images Docker.
+Chaque lien de partage est un UUID v4 généré à l'upload. Il est statistiquement impossible à deviner — il faut connaître le lien exact pour accéder au fichier.
+
+La taille des fichiers est limitée à 50 Mo par défaut. Les fichiers peuvent être supprimés automatiquement après leur date d'expiration pour éviter d'accumuler des données inutiles.
+
+---
+
+## Vérifier les dépendances
+
+Je vérifie régulièrement les dépendances avec `npm audit` pour détecter les failles connues :
 
 ```bash
-# Pour vérifier les dépendances
 cd backend && npm audit
 cd frontend && npm audit
 ```
 
-La sécurité est une priorité constante pour garantir que vos fichiers restent privés. 🛡️
+Snyk peut aussi être utilisé pour scanner les images Docker en plus des bibliothèques.
+
+---
+
+Si vous trouvez une vulnérabilité, ouvrez une issue — je préfère le savoir.

@@ -1,84 +1,60 @@
 # Changelog
 
-Toutes les modifications importantes du projet sont documentées ici.  
-Le format suit [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/) et le versionnement suit [Semantic Versioning](https://semver.org/lang/fr/).
+Ce fichier retrace l'évolution du projet, phase par phase.  
+Chaque entrée correspond à un tag Git et à une fonctionnalité livrée.
 
 ---
 
-## [1.0.0] — 2026-04-09 · `v1.0-phase1-done`
+## 1.0.0 — 9 avril 2026 — Authentification
 
-### ✨ Ajouté
-- **Authentification complète (US03/US04)**
-  - Inscription avec validation email + mot de passe (8 caractères minimum)
-  - Connexion avec génération de token JWT (expiration 24h)
-  - Hachage des mots de passe avec bcrypt (12 rounds)
-  - Persistance de la session via `AuthContext` côté frontend
-- **Interface utilisateur (Figma Path)**
-  - Design system global : police Outfit, dégradé Sunset Orange → Coral
-  - Page d'accueil minimaliste avec portail de téléversement circulaire
-  - Pages Login et Register avec cartes blanches solides
-  - Header fixe avec logo noir et bouton contextuel
-  - Composants réutilisables : Button (variantes primary/black/secondary), Input, Callout
-- **Infrastructure Docker**
-  - Conteneur backend NestJS avec healthcheck via curl
-  - Conteneur frontend Vite sur le port 3000
-  - PostgreSQL 16 Alpine avec volume persistant
-- **Documentation**
-  - README principal avec screenshots et architecture
-  - TESTING.md avec la stratégie de tests par phase
-  - SECURITY.md, MAINTENANCE.md, PERF.md
-  - `screenshots/README.md` avec les 3 captures de Phase 1
+Première version fonctionnelle avec inscription et connexion.
 
-### 🔧 Corrigé
-- Synchronisation du port Vite (3000) entre Dockerfile et docker-compose
-- Résolution des types TypeScript sur `JWT_EXPIRATION` dans AuthModule
-- Correction des imports manquants dans AppModule
+Côté backend, j'ai mis en place l'entité `User`, le hachage des mots de passe avec bcrypt (12 rounds) et la génération de tokens JWT valables 24h. Côté frontend, les pages Login et Register suivent le design Figma avec les cartes blanches et le dégradé Sunset. L'état de connexion est persisté via un `AuthContext` qui recharge la session depuis le localStorage au démarrage.
 
-### 🧪 Tests
-- 4 tests unitaires Jest pour `AuthService` (inscription, connexion, erreurs)
-- Fichier `app.e2e-spec.ts` Supertest en place (base à enrichir)
+L'infra Docker est en place avec les trois services, chacun avec son healthcheck.
+
+Correctifs en cours de route : synchronisation du port Vite entre le Dockerfile et docker-compose, résolution d'un problème de types TypeScript sur `JWT_EXPIRATION`, et imports manquants dans AppModule.
+
+Tests : 4 tests unitaires Jest sur `AuthService`, fichier Supertest en place pour les tests d'intégration.
+
+Tag : `v1.0-phase1-done`
 
 ---
 
-## [2.0.0] — 2026-04-10 · `v1.0-phase2-done`
+## 2.0.0 — 10 avril 2026 — Upload de fichiers
 
-### ✨ Ajouté
-- **Téléversement de fichiers (US01)**
-  - Endpoint `POST /api/files/upload` protégé par JWT
-  - Stockage sur disque via Multer (limite 50 Mo)
-  - Entité `File` avec `downloadToken` UUID unique et `expiresAt` pour la future expiration
-  - Modal d'upload avec drag & drop, barre de progression et état succès avec lien copiable
-  - Redirection vers `/login` si l'utilisateur tente d'uploader sans être connecté
+Ajout du téléversement de fichiers avec Multer.
 
-### 🔧 Corrigé
-- `VITE_API_URL` dans docker-compose complété avec le préfixe `/api`
+Le endpoint `POST /api/files/upload` est protégé par JWT. Les fichiers sont stockés sur disque dans `backend/uploads/` avec un nom UUID pour éviter les collisions. L'entité `File` stocke les métadonnées et un `downloadToken` unique qui servira pour le partage. La taille est limitée à 50 Mo.
+
+Côté frontend, la modal d'upload s'ouvre depuis le portail de la page d'accueil. Elle gère le drag & drop, une barre de progression en temps réel, et affiche le lien de partage copiable une fois l'envoi terminé. Si l'utilisateur n'est pas connecté, il est redirigé vers la page de connexion.
+
+Correctif : `VITE_API_URL` dans docker-compose ne contenait pas le préfixe `/api`, ce qui causait des 404 sur tous les appels.
+
+Tag : `v1.0-phase2-done`
 
 ---
 
-## [3.0.0] — 2026-04-10 · `v1.0-phase3-done`
+## 3.0.0 — 10 avril 2026 — Téléchargement et partage
 
-### ✨ Ajouté
-- **Téléchargement & partage (US02)**
-  - Endpoint public `GET /api/files/info/:token` — métadonnées JSON (404/410)
-  - Endpoint public `GET /api/files/download/:token` — stream fichier avec `Content-Disposition: attachment`
-  - Page `/download/:token` avec états : prêt, introuvable, expiré
-  - Couche API centralisée `frontend/src/services/api.ts` — fin des URLs hardcodées
+Ajout des endpoints publics de téléchargement et de la page de partage.
+
+`GET /api/files/info/:token` retourne les métadonnées du fichier sans authentification. `GET /api/files/download/:token` stream le fichier avec l'en-tête `Content-Disposition: attachment`. Les deux endpoints retournent 404 si le token est inconnu, et 410 si le fichier a expiré.
+
+La page `/download/:token` gère les trois états possibles : fichier disponible avec bouton de téléchargement, lien expiré, fichier introuvable. Aucune authentification requise pour accéder à cette page.
+
+En parallèle, j'ai centralisé tous les appels API dans `frontend/src/services/api.ts` pour ne plus avoir d'URLs hardcodées dispersées dans les composants. Le composant `Home` a aussi été extrait de `App.tsx` vers son propre fichier.
+
+Tag : `v1.0-phase3-done`
 
 ---
 
 ## À venir
 
-### [4.0.0] — Phase 4 · Historique (US05)
-- Dashboard "Mon espace" avec liste des fichiers uploadés
-- Endpoint `GET /api/files/my` protégé par JWT
+Phase 4 — dashboard "Mon espace" avec la liste des fichiers uploadés par l'utilisateur connecté.
 
-### [5.0.0] — Phase 5 · Suppression (US06)
-- Suppression d'un fichier depuis le dashboard
-- Endpoint `DELETE /api/files/:id` protégé par JWT
+Phase 5 — suppression d'un fichier depuis le dashboard.
 
-### [6.0.0] — Phase 6 · Expiration automatique (US10)
-- Cron job de nettoyage des fichiers expirés
+Phase 6 — cron job de nettoyage automatique des fichiers expirés.
 
-### [7.0.0] — Phase 7 · Finalisation v1.0.0
-- Tests E2E Cypress complets
-- Tag de release `v1.0.0`
+Phase 7 — tests E2E Cypress et release finale `v1.0.0`.

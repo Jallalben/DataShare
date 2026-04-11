@@ -1,121 +1,82 @@
-# Stratégie de Tests — DataShare
+# Stratégie de tests — DataShare
 
-Ce document décrit la stratégie de tests appliquée sur l'ensemble du projet DataShare.  
-Le même standard est appliqué à chaque phase avant de créer le tag Git et de pousser.
-
----
-
-## Pyramide de tests
-
-```
-          ▲
-         /E2E\        Cypress (parcours utilisateur complet)
-        /------\
-       /  Intég. \    Supertest (API backend avec DB réelle)
-      /------------\
-     /   Unitaires  \ Jest (backend) + Vitest (frontend)
-    /________________\
-```
+Chaque fonctionnalité est couverte avant de créer le tag Git. On part des tests unitaires vers les tests navigateur, dans cet ordre.
 
 ---
 
-## Outils
+## La pyramide
 
-| Outil | Scope | Commande | Statut |
-|:---|:---|:---|:---|
-| **Jest** | Backend — Unitaires | `cd backend && npm run test` | ✅ Opérationnel |
-| **Jest Coverage** | Backend — Couverture | `cd backend && npm run test:cov` | ✅ Opérationnel |
-| **Supertest** | Backend — Intégration E2E | `cd backend && npm run test:e2e` | ⚙️ En place (à enrichir) |
-| **Vitest** | Frontend — Unitaires | `cd frontend && npm run test` | ✅ Opérationnel |
-| **Cypress** | E2E — Navigateur complet | `npx cypress run` | ❌ À installer |
-| **GitHub Actions** | CI/CD — Automatisation | Push sur `main` | ✅ Opérationnel |
+Les tests unitaires couvrent la logique métier isolée. Les tests d'intégration vérifient les endpoints avec une vraie base de données. Les tests E2E simulent un utilisateur réel dans le navigateur.
 
 ---
 
-## Tests par phase
+## Les outils en place
 
-### ✅ Phase 1 — Authentification (US03/US04)
+Jest couvre les tests unitaires et d'intégration du backend. Les tests unitaires se lancent avec `cd backend && npm run test`, les tests d'intégration avec `cd backend && npm run test:e2e`.
 
-**Backend — Unitaires (Jest)**
-- `auth.service.spec.ts` : inscription réussie, email dupliqué → 409, connexion valide → JWT.
+Vitest couvre les tests unitaires du frontend. Il se lance avec `cd frontend && npm run test`.
 
-**Backend — Intégration (Supertest)**
-- `POST /api/auth/register` → 201, 409 si doublon.
-- `POST /api/auth/login` → 200 + `access_token`, 401 si mauvais mot de passe.
+Cypress est prévu pour les tests E2E navigateur en Phase 7. Il n'est pas encore installé.
 
-**Frontend — E2E (Cypress)**  
-*(À mettre en place — fichier : `cypress/e2e/auth.cy.ts`)*
-- Scénario inscription → redirection login.
-- Scénario connexion → redirection "Mon espace".
-- Scénario erreur → message d'erreur visible.
+GitHub Actions exécute Jest et Vitest automatiquement à chaque push sur `main`.
 
 ---
 
-### ✅ Phase 2 — Téléversement (US01)
+## Ce qui est couvert par phase
 
-**Backend — Unitaires**
-- `files.service.spec.ts` : upload valide → fichier créé en DB avec `downloadToken` UUID unique.
+### Phase 1 — Authentification
 
-**Backend — Intégration**
-- `POST /api/files/upload` (avec JWT) → 201 + `{ id, originalName, size, mimetype, downloadToken, createdAt }`.
-- `POST /api/files/upload` sans token → 401 Unauthorized.
-- `POST /api/files/upload` sans fichier → 400 Bad Request.
+Backend (Jest) : inscription réussie, email dupliqué retourne 409, connexion valide retourne un JWT, mauvais mot de passe retourne 401.
 
-**Frontend — E2E (Cypress)**  
-- Clic sur le portail sans être connecté → redirection `/login`.
-- Clic sur le portail connecté → modal d'upload s'ouvre.
-- Drag & drop d'un fichier → nom + poids affichés · bouton "Envoyer" activé.
-- Upload → barre de progression → état succès avec lien copiable.
+Backend (Supertest) : `POST /api/auth/register` retourne 201, 409 en cas de doublon. `POST /api/auth/login` retourne 200 avec le token, 401 si les identifiants sont faux.
+
+Frontend (Cypress, à venir) : parcours inscription puis connexion, affichage des messages d'erreur.
 
 ---
 
-### ✅ Phase 3 — Téléchargement & partage (US02)
+### Phase 2 — Upload
 
-**Backend — Unitaires**
-- `files.service.spec.ts` : `findByToken` valide → retourne le fichier, token inconnu → null.
-- Lien expiré → `GoneException` 410.
+Backend (Jest) : upload valide crée un enregistrement en base avec un `downloadToken` UUID. Upload sans fichier retourne 400. Upload sans JWT retourne 401.
 
-**Backend — Intégration**
-- `GET /api/files/info/:token` → 200 + métadonnées JSON (sans JWT).
-- `GET /api/files/info/:token` (token inconnu) → 404.
-- `GET /api/files/download/:token` → 200 + stream fichier avec `Content-Disposition: attachment`.
-- `GET /api/files/download/:token` (expiré) → 410.
+Backend (Supertest) : `POST /api/files/upload` avec un JWT valide retourne 201 avec les métadonnées.
 
-**Frontend — E2E (Cypress)**
-- Accès à `/download/:token` valide → nom du fichier + bouton "Télécharger" visible.
-- Clic "Télécharger" → téléchargement déclenché sans authentification.
-- Token inconnu → état "Fichier introuvable" affiché.
-- Token expiré → état "Lien expiré" affiché.
+Frontend (Cypress, à venir) : clic sur le portail sans être connecté redirige vers login, drag & drop d'un fichier déclenche l'upload, le lien de partage est affiché après succès.
 
 ---
 
-## Standard de livraison (toutes phases)
+### Phase 3 — Téléchargement
 
-```
-1. Développement de la feature
-2. Tests unitaires (Jest / Vitest)    → npm run test
-3. Tests d'intégration (Supertest)    → npm run test:e2e
-4. Tests E2E Cypress                  → npx cypress run
-5. Screenshots dans screenshots/README.md
-6. Commit conventionnel               → feat/fix/test/docs: ...
-7. Tag Git                            → vX.0-phaseX-done
-8. Push par l'utilisateur             → git push origin main --tags
-```
+Backend (Jest) : `findByToken` retourne le fichier si le token existe, null sinon. Un token expiré lève une `GoneException` 410.
+
+Backend (Supertest) : `GET /api/files/info/:token` retourne 200 sans JWT, 404 si inconnu, 410 si expiré. `GET /api/files/download/:token` stream le fichier.
+
+Frontend (Cypress, à venir) : la page de téléchargement affiche les métadonnées, le bouton déclenche le téléchargement, les états d'erreur sont visibles.
 
 ---
 
-## Commandes utiles
+## Standard de livraison
+
+Avant chaque tag Git :
+
+1. Les tests unitaires passent
+2. Les tests d'intégration passent
+3. Une capture d'écran est ajoutée dans `screenshots/`
+4. Un commit conventionnel est créé
+5. Le tag est créé localement
+6. Le push est fait par l'utilisateur
+
+---
+
+## Commandes rapides
 
 ```bash
-# Tout d'un coup (backend)
-cd backend && npm run test && npm run test:e2e
+# Backend
+cd backend && npm run test
+cd backend && npm run test:e2e
 
-# Cypress interactif (pour le debug)
+# Frontend
+cd frontend && npm run test
+
+# Cypress (Phase 7)
 npx cypress open
-
-# GitHub Actions — déclenché automatiquement au push sur main
 ```
-
----
-
-> Les workflows GitHub Actions seront configurés pour exécuter automatiquement l'ensemble de la pyramide à chaque `push` sur `main`.
