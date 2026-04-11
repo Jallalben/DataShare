@@ -2,6 +2,7 @@ import {
   Controller,
   Post,
   Get,
+  Delete,
   Param,
   Res,
   UseGuards,
@@ -11,6 +12,8 @@ import {
   BadRequestException,
   NotFoundException,
   GoneException,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -57,6 +60,28 @@ export class FilesController {
       downloadToken: saved.downloadToken,
       createdAt: saved.createdAt,
     };
+  }
+
+  @Get('my')
+  @UseGuards(AuthGuard('jwt'))
+  async getMyFiles(@Request() req: any) {
+    const files = await this.filesService.findByUserId(req.user.userId);
+    return files.map((f) => ({
+      id: f.id,
+      originalName: f.originalName,
+      size: Number(f.size),
+      mimetype: f.mimetype,
+      downloadToken: f.downloadToken,
+      createdAt: f.createdAt,
+      expiresAt: f.expiresAt,
+    }));
+  }
+
+  @Delete(':id')
+  @UseGuards(AuthGuard('jwt'))
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async deleteFile(@Param('id') id: string, @Request() req: any) {
+    await this.filesService.deleteFile(id, req.user.userId);
   }
 
   @Get('info/:token')

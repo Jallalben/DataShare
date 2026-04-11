@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException, ForbiddenException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { join } from 'path';
+import { unlink } from 'fs/promises';
 import { Repository } from 'typeorm';
 import { File } from './file.entity';
 
@@ -33,5 +34,22 @@ export class FilesService {
 
   getFilePath(filename: string): string {
     return join(process.cwd(), 'uploads', filename);
+  }
+
+  async findByUserId(userId: string): Promise<File[]> {
+    return this.filesRepository.find({
+      where: { userId },
+      order: { createdAt: 'DESC' },
+    });
+  }
+
+  async deleteFile(fileId: string, userId: string): Promise<void> {
+    const file = await this.filesRepository.findOne({ where: { id: fileId } });
+    if (!file) throw new NotFoundException('Fichier introuvable');
+    if (file.userId !== userId) throw new ForbiddenException('Accès refusé');
+
+    const filePath = this.getFilePath(file.filename);
+    await this.filesRepository.delete(fileId);
+    await unlink(filePath).catch(() => null);
   }
 }
