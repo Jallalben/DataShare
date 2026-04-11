@@ -28,6 +28,18 @@ L'idée de DataShare est de pouvoir envoyer un fichier rapidement, en ajoutant u
 
 ---
 
+### Phase 4 — Mon espace & historique (US05)
+
+![Mon espace](./screenshots/Screenshot_MySpace.png)
+
+---
+
+### Phase 5 — Suppression (US06)
+
+![Suppression](./screenshots/Screenshot_Delete_Files.png)
+
+---
+
 ## Architecture technique
 
 ![Architecture Technique](./architecture.png)
@@ -111,8 +123,8 @@ npx cypress run
 | **Phase 1** | Authentification (US03/US04) + Design Figma | ✅ Terminée | `v1.0-phase1-done` |
 | **Phase 2** | Téléversement de fichiers (US01) | ✅ Terminée | `v1.0-phase2-done` |
 | **Phase 3** | Téléchargement & partage (US02) | ✅ Terminée | `v1.0-phase3-done` |
-| **Phase 4** | Historique des fichiers (US05) | ⏳ À venir | - |
-| **Phase 5** | Suppression (US06) | ⏳ À venir | - |
+| **Phase 4** | Historique des fichiers (US05) | ✅ Terminée | `v1.0-phase4-done` |
+| **Phase 5** | Suppression (US06) | ✅ Terminée | `v1.0-phase5-done` |
 | **Phase 6** | Expiration automatique (US10) | ⏳ À venir | - |
 | **Phase 7** | Tests E2E Cypress + finalisation v1.0.0 | ⏳ À venir | - |
 

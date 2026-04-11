@@ -66,14 +66,35 @@ Chaque entrée documente l'URL, l'état visuel attendu, et le tag Git correspond
 
 ---
 
+## Phase 4 — Historique (US05) — `v1.0-phase4-done`
+
+### Mon espace — `Screenshot_MySpace.png`
+
+> Liste des fichiers uploadés · nom, taille, date · bouton "Copier le lien" · icône suppression
+
+![Mon espace](./Screenshot_MySpace.png)
+
+**URL** : `http://localhost:3000/myspace` — accessible uniquement connecté.
+
+---
+
+## Phase 5 — Suppression (US06) — `v1.0-phase5-done`
+
+### Suppression d'un fichier — `Screenshot_Delete_Files.png`
+
+> Confirmation native du navigateur avant suppression · fichier retiré de la liste après suppression
+
+![Suppression](./Screenshot_Delete_Files.png)
+
+**URL** : `http://localhost:3000/myspace` — bouton poubelle sur chaque fichier.
+
+---
+
 ## Tokens de design
 
-| Élément | Valeur |
-|:---|:---|
-| Police | Outfit (Google Fonts) |
-| Dégradé fond | `#FF7E5F` → `#FEB47B` (Sunset) |
-| Texte principal | `#000000` |
-| Bordure carte | `24px` (radius Figma) |
-| Phase 1 tag Git | `v1.0-phase1-done` |
-| Phase 2 tag Git | `v1.0-phase2-done` |
-| Phase 3 tag Git | `v1.0-phase3-done` |
+Police : Outfit (Google Fonts)  
+Dégradé fond : `#FF7E5F` → `#FEB47B` (Sunset)  
+Texte principal : `#000000`  
+Bordure carte : `24px` (radius Figma)
+
+Tags Git : `v1.0-phase1-done` · `v1.0-phase2-done` · `v1.0-phase3-done` · `v1.0-phase4-done` · `v1.0-phase5-done`
