@@ -1,6 +1,7 @@
 node_modules/
 .npm
 .env
+.env.example
 .env.local
 .env.production
 dist/
