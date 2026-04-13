@@ -40,6 +40,7 @@ export class File {
   @CreateDateColumn()
   createdAt: Date;
 
+  @Index()
   @Column({ type: 'timestamptz', nullable: true })
   expiresAt: Date | null;
 }
