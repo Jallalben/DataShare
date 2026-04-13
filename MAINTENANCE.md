@@ -1,28 +1,38 @@
-# Maintenance de DataShare
+# Maintenance — DataShare
 
 Quelques notes sur comment garder le projet à jour et en bonne santé.
 
-## Mise à jour des dépendances
+---
 
-- On vérifie régulièrement les dépendances avec `npm audit`.
-- Les petites mises à jour se font au fil de l'eau.
-- Tous les trois mois environ, on fait une revue plus complète pour mettre à jour les gros frameworks (NestJS, React).
+## Mettre à jour les dépendances
 
-## Déploiement
+Je vérifie les dépendances avec `npm audit` régulièrement. Les petites mises à jour se font au fil de l'eau. Tous les trois mois environ, je fais une passe plus complète pour mettre à jour les frameworks principaux (NestJS, React).
 
-Pour mettre à jour le projet en production avec Docker, c'est assez simple :
-1. Récupérer les dernières images : `docker compose pull`
-2. Relancer les services : `docker compose up -d --build --no-deps backend`
+---
 
-## Sauvegardes (Backups)
+## Déployer une mise à jour
 
-Il est conseillé de sauvegarder la base de données de temps en temps, surtout avant de grosses mises à jour :
+Avec Docker, c'est assez simple :
+
+```bash
+docker compose pull
+docker compose up -d --build --no-deps backend
+```
+
+---
+
+## Sauvegarder la base de données
+
+À faire avant toute mise à jour importante :
+
 ```bash
 docker compose exec postgres pg_dump -U datashare datashare > backups/db_$(date +%F).sql
 ```
-Pour les fichiers dans `uploads/`, une simple copie sur un autre serveur ou un stockage cloud une fois par jour suffit.
+
+Pour les fichiers dans `uploads/`, une copie quotidienne vers un stockage externe suffit.
+
+---
 
 ## En cas de problème
 
-- Si la base de données redémarre, les données ne sont pas perdues grâce au volume Docker persistant.
-- Si le disque se remplit, vérifiez les tâches automatiques qui purgent les fichiers expirés. 🔧
+Si un service redémarre, les données ne sont pas perdues grâce aux volumes Docker persistants. Si le disque se remplit, vérifier que le cron job de nettoyage tourne correctement avec `docker compose logs backend | grep Purge`. Le job tourne toutes les heures et supprime automatiquement les fichiers dont la date d'expiration est dépassée.

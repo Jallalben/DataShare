@@ -54,6 +54,36 @@ Frontend (Cypress, à venir) : la page de téléchargement affiche les métadonn
 
 ---
 
+### Phase 4 — Historique
+
+Backend (Jest) : `findByUserId` retourne les fichiers de l'utilisateur triés par date décroissante. Un appel sans JWT retourne 401.
+
+Backend (Supertest) : `GET /api/files/my` retourne 200 avec la liste des fichiers, `expiresAt` inclus dans chaque entrée.
+
+Frontend (Cypress, à venir) : les fichiers actifs apparaissent dans le tab "Actifs", les fichiers expirés dans le tab "Expirés".
+
+---
+
+### Phase 5 — Suppression
+
+Backend (Jest) : `deleteFile` supprime le fichier si l'utilisateur est propriétaire, lève `ForbiddenException` sinon.
+
+Backend (Supertest) : `DELETE /api/files/:id` retourne 204 après suppression, 403 si le fichier appartient à un autre utilisateur.
+
+Frontend (Cypress, à venir) : le fichier disparaît de la liste après confirmation, sans rechargement de page.
+
+---
+
+### Phase 6 — Expiration automatique
+
+Backend (Jest) : `saveFile` calcule `expiresAt` à 7 jours par défaut, respecte la valeur passée entre 1 et 7, rejette les valeurs hors limites.
+
+Le cron `purgeExpiredFiles` supprime bien les fichiers dont `expiresAt < NOW()` de la base et du disque.
+
+Frontend (Cypress, à venir) : le sélecteur de durée est visible dans la modale d'upload, la valeur par défaut est 7 jours, la durée choisie est bien transmise au backend.
+
+---
+
 ## Standard de livraison
 
 Avant chaque tag Git :

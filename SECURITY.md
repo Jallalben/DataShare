@@ -12,7 +12,7 @@ Les sessions sont gérées par des tokens JWT qui expirent après 24h. Le token 
 
 Chaque lien de partage est un UUID v4 généré à l'upload. Il est statistiquement impossible à deviner — il faut connaître le lien exact pour accéder au fichier.
 
-La taille des fichiers est limitée à 50 Mo par défaut. Les fichiers peuvent être supprimés automatiquement après leur date d'expiration pour éviter d'accumuler des données inutiles.
+La taille des fichiers est limitée à 50 Mo par défaut. À l'upload, l'utilisateur choisit une durée d'expiration entre 1 et 7 jours — 7 jours par défaut. Un cron job tourne toutes les heures côté serveur et supprime automatiquement les fichiers expirés de la base de données et du disque. Aucune donnée ne s'accumule silencieusement.
 
 ---
 

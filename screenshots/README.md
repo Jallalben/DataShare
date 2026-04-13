@@ -90,6 +90,28 @@ Chaque entrée documente l'URL, l'état visuel attendu, et le tag Git correspond
 
 ---
 
+## Phase 6 — Expiration automatique (US10) — `v1.0-phase6-done`
+
+### Sélecteur de durée à l'upload — `Screenshot_Upload_Expiry.png`
+
+> Sélecteur "Expire dans X jours" visible dans la modale · valeur par défaut 7 jours · configurable de 1 à 7
+
+![Upload expiration](./Screenshot_Upload_Expiry.png)
+
+**URL** : `http://localhost:3000/` → connecté → modale d'upload ouverte.
+
+---
+
+### Mon espace — expiration affichée — `Screenshot_MySpace_Expiry.png`
+
+> Fichier uploadé avec expiration · colonne "Expire dans X jours" visible · cron de purge actif toutes les heures côté serveur
+
+![MySpace expiration](./Screenshot_MySpace_Expiry.png)
+
+**URL** : `http://localhost:3000/myspace` — après upload d'un fichier avec durée configurée.
+
+---
+
 ## Tokens de design
 
 Police : Outfit (Google Fonts)  

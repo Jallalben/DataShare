@@ -19,3 +19,5 @@ Les fichiers sont streamés directement depuis le disque. Les colonnes `download
 ## Ce qui a été fait
 
 Les images Docker utilisent Node Alpine pour rester légères. Le code frontend ne charge que ce dont l'utilisateur a besoin au moment où il en a besoin. Les requêtes TypeORM sont écrites pour éviter les jointures inutiles.
+
+Le cron de purge tourne toutes les heures en arrière-plan. Il ne bloque aucun thread HTTP — NestJS Schedule l'isole du cycle de traitement des requêtes. Les fichiers expirés sont supprimés en séquence pour éviter tout pic de charge sur le disque.
