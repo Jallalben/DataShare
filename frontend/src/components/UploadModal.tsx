@@ -35,6 +35,7 @@ export const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => 
   const [result, setResult] = useState<UploadResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [expirationDays, setExpirationDays] = useState(7);
 
   const reset = () => {
     setSelectedFile(null);
@@ -44,6 +45,7 @@ export const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => 
     setResult(null);
     setError(null);
     setCopied(false);
+    setExpirationDays(7);
   };
 
   const handleClose = () => {
@@ -81,6 +83,7 @@ export const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => 
 
     const formData = new FormData();
     formData.append('file', selectedFile);
+    formData.append('expirationDays', String(expirationDays));
 
     setUploading(true);
     setError(null);
@@ -268,6 +271,25 @@ export const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => 
           transition: background 0.2s;
         }
         .upload-copy-btn:hover { background: #000; }
+        .upload-expiry {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          margin-top: 1rem;
+          font-size: 0.85rem;
+          color: #555;
+        }
+        .upload-expiry select {
+          border: 1.5px solid #e5e7eb;
+          border-radius: 8px;
+          padding: 0.35rem 0.6rem;
+          font-size: 0.85rem;
+          font-family: inherit;
+          color: #1A1A1A;
+          background: white;
+          cursor: pointer;
+        }
+        .upload-expiry select:focus { outline: none; border-color: #1A1A1A; }
       `}</style>
 
       {!result ? (
@@ -323,6 +345,20 @@ export const UploadModal: React.FC<UploadModalProps> = ({ isOpen, onClose }) => 
 
           {/* Error */}
           {error && <div className="upload-error">{error}</div>}
+
+          {/* Expiration */}
+          <div className="upload-expiry">
+            <span>Expire dans</span>
+            <select
+              value={expirationDays}
+              onChange={(e) => setExpirationDays(Number(e.target.value))}
+              disabled={uploading}
+            >
+              {[1, 2, 3, 4, 5, 6, 7].map((d) => (
+                <option key={d} value={d}>{d} jour{d > 1 ? 's' : ''}</option>
+              ))}
+            </select>
+          </div>
 
           {/* Actions */}
           <div className="upload-actions">

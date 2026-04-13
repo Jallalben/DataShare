@@ -4,6 +4,7 @@ import {
   Get,
   Delete,
   Param,
+  Body,
   Res,
   UseGuards,
   UseInterceptors,
@@ -45,12 +46,14 @@ export class FilesController {
   async uploadFile(
     @UploadedFile() file: Express.Multer.File,
     @Request() req: any,
+    @Body('expirationDays') expirationDays?: string,
   ) {
     if (!file) {
       throw new BadRequestException('No file provided');
     }
 
-    const saved = await this.filesService.saveFile(file, req.user.userId);
+    const days = expirationDays ? parseInt(expirationDays, 10) : 7;
+    const saved = await this.filesService.saveFile(file, req.user.userId, days);
 
     return {
       id: saved.id,

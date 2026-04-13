@@ -15,8 +15,13 @@ export class FilesService {
   async saveFile(
     multerFile: Express.Multer.File,
     userId: string,
+    expirationDays = 7,
   ): Promise<File> {
     const downloadToken = crypto.randomUUID();
+    const days = Math.min(Math.max(1, expirationDays), 7);
+    const expiresAt = new Date();
+    expiresAt.setDate(expiresAt.getDate() + days);
+
     const fileEntity = this.filesRepository.create({
       originalName: multerFile.originalname,
       filename: multerFile.filename,
@@ -24,6 +29,7 @@ export class FilesService {
       size: multerFile.size,
       userId,
       downloadToken,
+      expiresAt,
     });
     return this.filesRepository.save(fileEntity);
   }
