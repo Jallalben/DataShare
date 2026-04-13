@@ -63,7 +63,7 @@ services:
     ports:
       - "${FRONTEND_PORT:-3000}:3000"
     environment:
-      VITE_API_URL: http://datashare-api:3001/api
+      VITE_API_URL: http://localhost:${BACKEND_PORT:-3001}/api
     volumes:
       - ./frontend/src:/app/src
       - ./frontend/public:/app/public

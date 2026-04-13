@@ -1,0 +1,4 @@
+services:
+  frontend:
+    environment:
+      VITE_API_URL: http://datashare-api:3001/api
