@@ -11,7 +11,7 @@ jobs:
   # 1. Tests unitaires Backend
   # ─────────────────────────────────────────
   backend-unit:
-    name: 🧪 Backend — Tests unitaires
+    name: Backend — Tests unitaires
     runs-on: ubuntu-latest
 
     steps:
@@ -43,7 +43,7 @@ jobs:
   # 2. Tests d'intégration Backend (E2E API)
   # ─────────────────────────────────────────
   backend-e2e:
-    name: 🔗 Backend — Tests d'intégration
+    name: Backend — Tests d'intégration
     runs-on: ubuntu-latest
 
     services:
@@ -94,7 +94,7 @@ jobs:
   # 3. Tests unitaires Frontend
   # ─────────────────────────────────────────
   frontend-unit:
-    name: 🎨 Frontend — Tests unitaires
+    name: Frontend — Tests unitaires
     runs-on: ubuntu-latest
 
     steps:
