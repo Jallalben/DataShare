@@ -23,6 +23,16 @@ import { extname } from 'path';
 import type { Response } from 'express';
 import { FilesService } from './files.service';
 
+const FORBIDDEN_MIMETYPES = [
+  'application/x-msdownload',
+  'application/x-executable',
+  'application/x-sh',
+  'application/x-bat',
+  'application/x-msdos-program',
+];
+
+const FORBIDDEN_EXTENSIONS = ['.exe', '.bat', '.sh', '.cmd', '.com', '.msi', '.ps1', '.vbs'];
+
 const multerOptions = {
   storage: diskStorage({
     destination: './uploads',
@@ -33,6 +43,13 @@ const multerOptions = {
   }),
   limits: {
     fileSize: 50 * 1024 * 1024, // 50 MB
+  },
+  fileFilter: (_req: any, file: Express.Multer.File, cb: any) => {
+    const ext = extname(file.originalname).toLowerCase();
+    if (FORBIDDEN_EXTENSIONS.includes(ext) || FORBIDDEN_MIMETYPES.includes(file.mimetype)) {
+      return cb(new BadRequestException('Ce type de fichier n\'est pas autorisé.'), false);
+    }
+    cb(null, true);
   },
 };
 
