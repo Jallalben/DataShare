@@ -81,6 +81,7 @@ test(auth): add integration tests for register endpoint
 
 - Node.js v24+
 - Docker et Docker Compose
+- `make` (optionnel)
 
 ---
 
@@ -91,7 +92,7 @@ test(auth): add integration tests for register endpoint
 cp .env.example .env
 
 # Démarrer tous les services
-docker compose up --build
+make up
 
 # Application disponible sur http://localhost:3000
 ```
@@ -110,8 +111,8 @@ cd backend && npm run test:e2e
 # Tests unitaires (frontend)
 cd frontend && npm run test
 
-# Tests E2E Cypress
-npm run cy:run
+# Tests E2E Cypress en Docker
+make e2e
 ```
 
 La CI GitHub Actions lance automatiquement tous ces tests à chaque push sur `main`.
@@ -123,7 +124,7 @@ La CI GitHub Actions lance automatiquement tous ces tests à chaque push sur `ma
 Avant de soumettre une Pull Request, vérifier que :
 
 - Les tests unitaires correspondants sont écrits
-- Tous les tests passent
+- Tous les tests passent (`make e2e` pour les E2E)
 - Une capture d'écran est ajoutée dans `screenshots/` si c'est une feature visuelle
 - Le `CHANGELOG.md` est mis à jour
 - Un commit conventionnel est utilisé

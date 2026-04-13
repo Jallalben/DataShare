@@ -2,7 +2,7 @@
 
 Un outil simple pour partager des fichiers avec des liens temporaires et sécurisés.
 
-L'idée de DataShare est de pouvoir envoyer un fichier rapidement, en ajoutant un mot de passe si besoin, et en décidant quand le lien doit expirer. Une fois le temps écoulé, le fichier n'est plus accessible.
+L'idée de DataShare est de pouvoir envoyer un fichier rapidement et de décider quand le lien doit expirer. Une fois le temps écoulé, le fichier n'est plus accessible et est supprimé automatiquement du serveur.
 
 ---
 
@@ -16,31 +16,31 @@ L'idée de DataShare est de pouvoir envoyer un fichier rapidement, en ajoutant u
 
 ---
 
-### Phase 2 — Téléversement de fichiers (US01)
+### Phase 2 — Téléversement de fichiers
 
 ![Fichier envoyé](./screenshots/Screenshot_Files_Sent.png)
 
 ---
 
-### Phase 3 — Téléchargement & partage (US02)
+### Phase 3 — Téléchargement & partage
 
 ![Page de téléchargement](./screenshots/Screenshot_Download_Page.png)
 
 ---
 
-### Phase 4 — Mon espace & historique (US05)
+### Phase 4 — Mon espace & historique
 
 ![Mon espace](./screenshots/Screenshot_MySpace.png)
 
 ---
 
-### Phase 5 — Suppression (US06)
+### Phase 5 — Suppression
 
 ![Suppression](./screenshots/Screenshot_Delete_Files.png)
 
 ---
 
-### Phase 6 — Expiration automatique (US10)
+### Phase 6 — Expiration automatique
 
 | Sélecteur d'expiration                                      | Mon espace — expiration affichée                             |
 | :---------------------------------------------------------: | :----------------------------------------------------------: |
@@ -61,20 +61,21 @@ L'idée de DataShare est de pouvoir envoyer un fichier rapidement, en ajoutant u
 | **Backend**         | NestJS + TypeScript                | v11        |
 | **Frontend**        | React + Vite                       | v19 / v8   |
 | **Base de données** | PostgreSQL                         | v16 Alpine |
-| **Auth**            | JWT + Bcrypt                       | -          |
-| **Tests Unitaires** | Jest (backend) / Vitest (frontend) | -          |
-| **Tests E2E**       | Cypress                            | -          |
-| **CI/CD**           | GitHub Actions                     | -          |
-| **Conteneurs**      | Docker + Docker Compose            | -          |
+| **Auth**            | JWT + Bcrypt                       | —          |
+| **Tests unitaires** | Jest (backend) / Vitest (frontend) | —          |
+| **Tests E2E**       | Cypress 15                         | —          |
+| **CI/CD**           | GitHub Actions                     | —          |
+| **Conteneurs**      | Docker + Docker Compose            | —          |
 
 ---
 
 ## Sécurité
 
 - Mots de passe hachés avec **bcrypt** (12 rounds).
-- Sessions gérées via **JWT** (token en mémoire, pas de localStorage).
+- Sessions gérées via **JWT** (24h, stocké en mémoire côté client).
 - Liens de partage avec **UUID v4** (impossibles à deviner).
-- Expiration configurable par fichier, purge automatique toutes les heures.
+- Expiration configurable de 1 à 7 jours, purge automatique toutes les heures.
+- Types de fichiers exécutables bloqués à l'upload.
 
 ---
 
@@ -82,8 +83,9 @@ L'idée de DataShare est de pouvoir envoyer un fichier rapidement, en ajoutant u
 
 ### Prérequis
 
-- Docker et Docker Compose installés.
-- Node.js v24+ (optionnel, pour le développement local sans Docker).
+- Docker et Docker Compose
+- Node.js v24+ (optionnel, pour le développement local sans Docker)
+- `make` (optionnel, pour les raccourcis)
 
 ### Lancer le projet
 
@@ -103,6 +105,24 @@ L'application est accessible sur :
 
 ---
 
+## Commandes disponibles
+
+```bash
+# Démarrer la stack en fond
+make up
+
+# Arrêter tous les services
+make down
+
+# Suivre les logs en temps réel
+make logs
+
+# Lancer les tests E2E Cypress en Docker (stack complète)
+make e2e
+```
+
+---
+
 ## Tests
 
 ```bash
@@ -118,8 +138,11 @@ cd backend && npm run test:e2e
 # Unitaires (frontend)
 cd frontend && npm run test
 
-# E2E Cypress
+# E2E Cypress — local
 npm run cy:run
+
+# E2E Cypress — Docker (une seule commande)
+make e2e
 ```
 
 > Voir [TESTING.md](./TESTING.md) pour la stratégie complète de tests.
@@ -128,15 +151,15 @@ npm run cy:run
 
 ## Avancement des phases
 
-| Phase        | Contenu                                       | Statut        | Tag Git             |
-| :----------- | :-------------------------------------------- | :------------ | :------------------ |
-| **Phase 1**  | Authentification (US03/US04) + Design Figma   | Terminée      | `v1.0-phase1-done`  |
-| **Phase 2**  | Téléversement de fichiers (US01)              | Terminée      | `v1.0-phase2-done`  |
-| **Phase 3**  | Téléchargement & partage (US02)               | Terminée      | `v1.0-phase3-done`  |
-| **Phase 4**  | Historique des fichiers (US05)                | Terminée      | `v1.0-phase4-done`  |
-| **Phase 5**  | Suppression (US06)                            | Terminée      | `v1.0-phase5-done`  |
-| **Phase 6**  | Expiration automatique (US10)                 | Terminée      | `v1.0-phase6-done`  |
-| **Phase 7**  | Tests E2E Cypress + finalisation v1.0.0       | Terminée      | `v1.0.0`            |
+| Phase       | Contenu                                     | Statut   | Tag Git            |
+| :---------- | :------------------------------------------ | :------- | :----------------- |
+| **Phase 1** | Authentification (US03/US04) + Design Figma | Terminée | `v1.0-phase1-done` |
+| **Phase 2** | Téléversement de fichiers (US01)            | Terminée | `v1.0-phase2-done` |
+| **Phase 3** | Téléchargement & partage (US02)             | Terminée | `v1.0-phase3-done` |
+| **Phase 4** | Historique des fichiers (US05)              | Terminée | `v1.0-phase4-done` |
+| **Phase 5** | Suppression (US06)                          | Terminée | `v1.0-phase5-done` |
+| **Phase 6** | Expiration automatique (US10)               | Terminée | `v1.0-phase6-done` |
+| **Phase 7** | Tests E2E Cypress + finalisation v1.0.0     | Terminée | `v1.0.0`           |
 
 ---
 

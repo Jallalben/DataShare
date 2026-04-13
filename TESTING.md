@@ -12,11 +12,11 @@ Les tests unitaires couvrent la logique métier isolée. Les tests d'intégratio
 
 ## Les outils en place
 
-Jest couvre les tests unitaires et d'intégration du backend. Les tests unitaires se lancent avec `cd backend && npm run test`, les tests d'intégration avec `cd backend && npm run test:e2e`.
+Jest couvre les tests unitaires et d'intégration du backend.
 
-Vitest couvre les tests unitaires du frontend. Il se lance avec `cd frontend && npm run test`.
+Vitest couvre les tests unitaires du frontend.
 
-Cypress 15 couvre les tests E2E navigateur depuis la Phase 7. Les tests se lancent avec `npm run cy:run` depuis la racine du projet. Trois scénarios sont couverts : inscription et connexion, upload d'un fichier, téléchargement via lien.
+Cypress 15 couvre les tests E2E navigateur depuis la Phase 7. Trois scénarios sont couverts : inscription et connexion, upload d'un fichier, téléchargement via lien.
 
 GitHub Actions exécute Jest, Vitest et Cypress automatiquement à chaque push sur `main`.
 
@@ -60,7 +60,7 @@ Backend (Jest) : `findByUserId` retourne les fichiers de l'utilisateur triés pa
 
 Backend (Supertest) : `GET /api/files/my` retourne 200 avec la liste des fichiers, `expiresAt` inclus dans chaque entrée.
 
-Frontend (Cypress) : les fichiers actifs apparaissent dans le tab "Actifs", les fichiers expirés dans le tab "Expirés".
+Frontend (Cypress) : les fichiers actifs apparaissent dans la liste, les métadonnées sont affichées correctement.
 
 ---
 
@@ -70,7 +70,7 @@ Backend (Jest) : `deleteFile` supprime le fichier si l'utilisateur est propriét
 
 Backend (Supertest) : `DELETE /api/files/:id` retourne 204 après suppression, 403 si le fichier appartient à un autre utilisateur.
 
-Frontend (Cypress) : le fichier disparaît de la liste après confirmation, sans rechargement de page.
+Frontend (Cypress) : le fichier disparaît de la liste après suppression.
 
 ---
 
@@ -113,9 +113,12 @@ cd backend && npm run test:e2e
 # Frontend — unitaires
 cd frontend && npm run test
 
-# E2E Cypress
+# E2E Cypress — local
 npm run cy:run
 
-# Cypress en mode interactif
+# E2E Cypress — interactif
 npm run cy:open
+
+# E2E Cypress — Docker (stack complète en une commande)
+make e2e
 ```

@@ -1,7 +1,9 @@
 {
   "scripts": {
     "cy:open": "cypress open",
-    "cy:run": "cypress run"
+    "cy:run": "cypress run",
+    "e2e": "docker compose --profile e2e up --abort-on-container-exit --exit-code-from cypress",
+    "e2e:down": "docker compose --profile e2e down"
   },
   "devDependencies": {
     "cypress": "^15.13.1",

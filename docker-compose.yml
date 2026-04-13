@@ -63,13 +63,40 @@ services:
     ports:
       - "${FRONTEND_PORT:-3000}:3000"
     environment:
-      VITE_API_URL: http://localhost:${BACKEND_PORT:-3001}/api
+      VITE_API_URL: http://datashare-api:3001/api
     volumes:
       - ./frontend/src:/app/src
       - ./frontend/public:/app/public
     depends_on:
       backend:
         condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:3000 > /dev/null || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    networks:
+      - datashare-network
+
+  cypress:
+    image: cypress/included:13.17.0
+    container_name: datashare-cypress
+    working_dir: /e2e
+    environment:
+      CYPRESS_baseUrl: http://datashare-front:3000
+    volumes:
+      - ./cypress:/e2e/cypress
+      - ./cypress.config.ts:/e2e/cypress.config.ts
+      - ./tsconfig.json:/e2e/tsconfig.json
+      - ./package.json:/e2e/package.json
+      - ./package-lock.json:/e2e/package-lock.json
+      - cypress_cache:/root/.cache/Cypress
+    depends_on:
+      frontend:
+        condition: service_healthy
+    profiles:
+      - e2e
     networks:
       - datashare-network
 
@@ -78,6 +105,8 @@ volumes:
     name: datashare-postgres-data
   uploads:
     name: datashare-uploads
+  cypress_cache:
+    name: datashare-cypress-cache
 
 networks:
   datashare-network:

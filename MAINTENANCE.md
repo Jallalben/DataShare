@@ -10,14 +10,37 @@ Je vérifie les dépendances avec `npm audit` régulièrement. Les petites mises
 
 ---
 
-## Déployer une mise à jour
+## Démarrer et arrêter la stack
 
-Avec Docker, c'est assez simple :
+```bash
+# Démarrer tous les services
+make up
+
+# Arrêter tous les services
+make down
+
+# Suivre les logs en temps réel
+make logs
+```
+
+---
+
+## Déployer une mise à jour
 
 ```bash
 docker compose pull
 docker compose up -d --build --no-deps backend
 ```
+
+---
+
+## Lancer les tests E2E en Docker
+
+```bash
+make e2e
+```
+
+Cette commande démarre toute la stack, attend que chaque service soit prêt, lance Cypress, puis arrête tout à la fin. Le code de sortie reflète le résultat des tests.
 
 ---
 
