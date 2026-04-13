@@ -37,15 +37,15 @@ describe('Upload de fichier', () => {
       const jwt = res.body.access_token
       const user = res.body.user
 
-      // Injecter le token dans localStorage pour que AuthContext le restaure
-      cy.window().then((win) => {
-        win.localStorage.setItem('datashare_token', jwt)
-        win.localStorage.setItem('datashare_user', JSON.stringify(user))
+      cy.visit('/myspace', {
+        onBeforeLoad(win) {
+          win.localStorage.setItem('datashare_token', jwt)
+          win.localStorage.setItem('datashare_user', JSON.stringify(user))
+        },
       })
-    })
 
-    cy.visit('/myspace')
-    cy.contains('test-file.txt', { timeout: 10000 }).should('be.visible')
-    cy.contains(/expire dans/i).should('be.visible')
+      cy.contains('test-file.txt', { timeout: 10000 }).should('be.visible')
+      cy.contains(/expire dans/i).should('be.visible')
+    })
   })
 })
