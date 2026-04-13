@@ -1,32 +1,32 @@
 # Contribuer à DataShare
 
-Merci de l'intérêt que tu portes à ce projet ! Que ce soit pour corriger un bug, proposer une fonctionnalité ou améliorer la documentation, chaque contribution compte.
+Merci de l'intérêt porté à ce projet. Que ce soit pour corriger un bug, proposer une fonctionnalité ou améliorer la documentation, chaque contribution compte.
 
 ---
 
 ## Avant de commencer
 
-Quelques règles simples pour qu'on travaille efficacement ensemble :
+Quelques règles simples pour travailler efficacement ensemble :
 
-- **Ouvre une issue d'abord** si tu veux ajouter une fonctionnalité importante. Ça évite de travailler sur quelque chose qui ne sera pas mergé.
-- **Une branche = un sujet.** Pas de mélanges entre une correction de bug et une nouvelle feature dans la même PR.
-- **Lis le code existant** avant d'écrire le tien. Les patterns utilisés (service/controller NestJS, composants React) ont été choisis intentionnellement.
+- Ouvrir une issue d'abord si la fonctionnalité est importante — ça évite de travailler sur quelque chose qui ne sera pas mergé.
+- Une branche = un sujet. Pas de mélanges entre une correction de bug et une nouvelle feature dans la même PR.
+- Lire le code existant avant d'écrire le sien. Les patterns utilisés (service/controller NestJS, composants React) ont été choisis intentionnellement.
 
 ---
 
 ## Workflow Git
 
 ```bash
-# 1. Forke le dépôt et clone ta copie
+# 1. Forker le dépôt et cloner
 git clone https://github.com/TON_USERNAME/DataShare.git
 
-# 2. Crée une branche depuis main
+# 2. Créer une branche depuis main
 git checkout -b feat/nom-de-ta-feature
 
-# 3. Développe, teste, commite
-git commit -m "feat: ajouter la zone de dépôt drag & drop"
+# 3. Développer, tester, commiter
+git commit -m 'feat: ajouter la zone de dépôt drag and drop'
 
-# 4. Pousse et ouvre une Pull Request
+# 4. Pousser et ouvrir une Pull Request
 git push origin feat/nom-de-ta-feature
 ```
 
@@ -34,23 +34,24 @@ git push origin feat/nom-de-ta-feature
 
 ## Convention de commits
 
-On utilise les **Conventional Commits**. Le format est le suivant :
+On utilise les Conventional Commits. Le format est le suivant :
 
 ```
 <type>(<scope>): description courte
 ```
 
-| Type | Quand l'utiliser |
-|:---|:---|
-| `feat` | Nouvelle fonctionnalité |
-| `fix` | Correction de bug |
-| `style` | Changements visuels (CSS, UI) |
-| `refactor` | Refactorisation sans changement fonctionnel |
-| `test` | Ajout ou correction de tests |
-| `docs` | Mise à jour de la documentation |
-| `chore` | Tâches techniques (dépendances, config) |
+Types disponibles :
 
-**Exemples concrets :**
+- `feat` — nouvelle fonctionnalité
+- `fix` — correction de bug
+- `style` — changements visuels (CSS, UI)
+- `refactor` — refactorisation sans changement fonctionnel
+- `test` — ajout ou correction de tests
+- `docs` — mise à jour de la documentation
+- `chore` — tâches techniques (dépendances, config)
+
+Exemples :
+
 ```bash
 feat(auth): implement JWT login endpoint
 fix(upload): handle large file size validation error
@@ -63,14 +64,23 @@ test(auth): add integration tests for register endpoint
 ## Standards de code
 
 ### Backend (NestJS)
+
 - Un module = un dossier (`src/auth/`, `src/files/`...).
 - Toujours utiliser des DTOs avec `class-validator` pour valider les entrées.
 - Les services contiennent la logique métier, pas les contrôleurs.
 
 ### Frontend (React)
+
 - Les composants réutilisables vont dans `src/components/`.
 - Les pages vont dans `src/pages/`.
-- On évite le CSS inline. Tout passe par les classes CSS du design system (`index.css`).
+- Tout appel HTTP passe par `apiClient` dans `src/services/api.ts`.
+
+---
+
+## Prérequis
+
+- Node.js v24+
+- Docker et Docker Compose
 
 ---
 
@@ -100,24 +110,20 @@ cd backend && npm run test:e2e
 # Tests unitaires (frontend)
 cd frontend && npm run test
 
-# Tests E2E (Cypress)
-npx cypress run
+# Tests E2E Cypress
+npm run cy:run
 ```
 
-> La CI GitHub Actions lance automatiquement tous ces tests à chaque push sur `main`.
+La CI GitHub Actions lance automatiquement tous ces tests à chaque push sur `main`.
 
 ---
 
 ## Standard de livraison par feature
 
-Avant de soumettre une Pull Request, vérifie que tu as bien :
+Avant de soumettre une Pull Request, vérifier que :
 
-- [ ] Écrit les tests unitaires correspondants
-- [ ] Vérifié que tous les tests passent (`npm run test`)
-- [ ] Ajouté une capture d'écran dans `screenshots/` si c'est une feature visuelle
-- [ ] Mis à jour le `CHANGELOG.md`
-- [ ] Utilisé un commit conventionnel
-
----
-
-Merci encore pour ta contribution. N'hésite pas à ouvrir une issue si tu as des questions. 🙌
+- Les tests unitaires correspondants sont écrits
+- Tous les tests passent
+- Une capture d'écran est ajoutée dans `screenshots/` si c'est une feature visuelle
+- Le `CHANGELOG.md` est mis à jour
+- Un commit conventionnel est utilisé

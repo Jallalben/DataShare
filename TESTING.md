@@ -16,9 +16,9 @@ Jest couvre les tests unitaires et d'intégration du backend. Les tests unitaire
 
 Vitest couvre les tests unitaires du frontend. Il se lance avec `cd frontend && npm run test`.
 
-Cypress est prévu pour les tests E2E navigateur en Phase 7. Il n'est pas encore installé.
+Cypress 15 couvre les tests E2E navigateur depuis la Phase 7. Les tests se lancent avec `npm run cy:run` depuis la racine du projet. Trois scénarios sont couverts : inscription et connexion, upload d'un fichier, téléchargement via lien.
 
-GitHub Actions exécute Jest et Vitest automatiquement à chaque push sur `main`.
+GitHub Actions exécute Jest, Vitest et Cypress automatiquement à chaque push sur `main`.
 
 ---
 
@@ -30,7 +30,7 @@ Backend (Jest) : inscription réussie, email dupliqué retourne 409, connexion v
 
 Backend (Supertest) : `POST /api/auth/register` retourne 201, 409 en cas de doublon. `POST /api/auth/login` retourne 200 avec le token, 401 si les identifiants sont faux.
 
-Frontend (Cypress, à venir) : parcours inscription puis connexion, affichage des messages d'erreur.
+Frontend (Cypress) : parcours inscription puis connexion, affichage des messages d'erreur avec des identifiants incorrects.
 
 ---
 
@@ -40,7 +40,7 @@ Backend (Jest) : upload valide crée un enregistrement en base avec un `download
 
 Backend (Supertest) : `POST /api/files/upload` avec un JWT valide retourne 201 avec les métadonnées.
 
-Frontend (Cypress, à venir) : clic sur le portail sans être connecté redirige vers login, drag & drop d'un fichier déclenche l'upload, le lien de partage est affiché après succès.
+Frontend (Cypress) : upload d'un fichier via `selectFile`, vérification du lien de partage affiché après succès, vérification que le fichier apparaît dans Mon espace.
 
 ---
 
@@ -50,7 +50,7 @@ Backend (Jest) : `findByToken` retourne le fichier si le token existe, null sino
 
 Backend (Supertest) : `GET /api/files/info/:token` retourne 200 sans JWT, 404 si inconnu, 410 si expiré. `GET /api/files/download/:token` stream le fichier.
 
-Frontend (Cypress, à venir) : la page de téléchargement affiche les métadonnées, le bouton déclenche le téléchargement, les états d'erreur sont visibles.
+Frontend (Cypress) : la page de téléchargement affiche les métadonnées du fichier, le bouton de téléchargement est visible, un token inconnu retourne bien 404.
 
 ---
 
@@ -60,7 +60,7 @@ Backend (Jest) : `findByUserId` retourne les fichiers de l'utilisateur triés pa
 
 Backend (Supertest) : `GET /api/files/my` retourne 200 avec la liste des fichiers, `expiresAt` inclus dans chaque entrée.
 
-Frontend (Cypress, à venir) : les fichiers actifs apparaissent dans le tab "Actifs", les fichiers expirés dans le tab "Expirés".
+Frontend (Cypress) : les fichiers actifs apparaissent dans le tab "Actifs", les fichiers expirés dans le tab "Expirés".
 
 ---
 
@@ -70,7 +70,7 @@ Backend (Jest) : `deleteFile` supprime le fichier si l'utilisateur est propriét
 
 Backend (Supertest) : `DELETE /api/files/:id` retourne 204 après suppression, 403 si le fichier appartient à un autre utilisateur.
 
-Frontend (Cypress, à venir) : le fichier disparaît de la liste après confirmation, sans rechargement de page.
+Frontend (Cypress) : le fichier disparaît de la liste après confirmation, sans rechargement de page.
 
 ---
 
@@ -78,9 +78,9 @@ Frontend (Cypress, à venir) : le fichier disparaît de la liste après confirma
 
 Backend (Jest) : `saveFile` calcule `expiresAt` à 7 jours par défaut, respecte la valeur passée entre 1 et 7, rejette les valeurs hors limites.
 
-Le cron `purgeExpiredFiles` supprime bien les fichiers dont `expiresAt < NOW()` de la base et du disque.
+Le cron `purgeExpiredFiles` supprime les fichiers dont `expiresAt < NOW()` de la base et du disque.
 
-Frontend (Cypress, à venir) : le sélecteur de durée est visible dans la modale d'upload, la valeur par défaut est 7 jours, la durée choisie est bien transmise au backend.
+Frontend (Cypress) : le sélecteur de durée est visible dans la modale d'upload, la valeur par défaut est 7 jours, la durée choisie est transmise au backend.
 
 ---
 
@@ -90,23 +90,32 @@ Avant chaque tag Git :
 
 1. Les tests unitaires passent
 2. Les tests d'intégration passent
-3. Une capture d'écran est ajoutée dans `screenshots/`
-4. Un commit conventionnel est créé
-5. Le tag est créé localement
-6. Le push est fait par l'utilisateur
+3. Les tests Cypress passent
+4. Une capture d'écran est ajoutée dans `screenshots/`
+5. Un commit conventionnel est créé
+6. Le tag est créé localement
+7. Le push est fait
 
 ---
 
 ## Commandes rapides
 
 ```bash
-# Backend
+# Backend — unitaires
 cd backend && npm run test
+
+# Backend — couverture
+cd backend && npm run test:cov
+
+# Backend — intégration
 cd backend && npm run test:e2e
 
-# Frontend
+# Frontend — unitaires
 cd frontend && npm run test
 
-# Cypress (Phase 7)
-npx cypress open
+# E2E Cypress
+npm run cy:run
+
+# Cypress en mode interactif
+npm run cy:open
 ```
