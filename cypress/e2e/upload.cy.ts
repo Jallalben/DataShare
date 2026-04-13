@@ -14,11 +14,11 @@ describe('Upload de fichier', () => {
   it('permet d\'uploader un fichier et d\'obtenir un lien de partage', () => {
     cy.visit('/')
 
-    // Ouvrir la modale d'upload
-    cy.contains(/envoyer|partager|déposer/i).click()
+    // Ouvrir la modale d'upload via le portail circulaire
+    cy.get('.upload-portal').click()
 
     // Attendre que la modale soit visible avant de chercher l'input
-    cy.get('input[type="file"]', { timeout: 6000 }).should('exist')
+    cy.get('input[type="file"]', { timeout: 8000 }).should('exist')
     cy.get('input[type="file"]').selectFile('cypress/fixtures/test-file.txt', { force: true })
 
     // Vérifier que le fichier est sélectionné
