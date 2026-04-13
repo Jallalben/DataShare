@@ -118,8 +118,8 @@ cd backend && npm run test:e2e
 # Unitaires (frontend)
 cd frontend && npm run test
 
-# E2E Cypress — à venir
-npx cypress run
+# E2E Cypress
+npm run cy:run
 ```
 
 > Voir [TESTING.md](./TESTING.md) pour la stratégie complète de tests.
@@ -136,7 +136,7 @@ npx cypress run
 | **Phase 4**  | Historique des fichiers (US05)                | Terminée      | `v1.0-phase4-done`  |
 | **Phase 5**  | Suppression (US06)                            | Terminée      | `v1.0-phase5-done`  |
 | **Phase 6**  | Expiration automatique (US10)                 | Terminée      | `v1.0-phase6-done`  |
-| **Phase 7**  | Tests E2E Cypress + finalisation v1.0.0       | A venir       | -                   |
+| **Phase 7**  | Tests E2E Cypress + finalisation v1.0.0       | Terminée      | `v1.0.0`            |
 
 ---
 

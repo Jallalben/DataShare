@@ -5,9 +5,11 @@ Chaque entrée correspond à un tag Git et à une fonctionnalité livrée.
 
 ---
 
-## Phase 7 — Tests E2E Cypress — 13 avril 2026 — en cours
+## Phase 7 — Tests E2E Cypress — 13 avril 2026 — `v1.0.0`
 
-Cypress 15 installé à la racine du projet avec TypeScript. Trois scénarios couverts : inscription et connexion, upload d'un fichier, téléchargement via lien. Le job Cypress est intégré dans la CI GitHub Actions et se lance après les tests unitaires.
+Cypress 15 installé à la racine du projet avec TypeScript. Trois scénarios couverts : inscription et connexion, upload d'un fichier avec vérification dans Mon espace, téléchargement via lien et gestion du 404. Le job Cypress est intégré dans la CI GitHub Actions et se lance après les tests unitaires.
+
+Correctif : `MySpace` redirige vers `/login` avant que `AuthContext` finisse de lire le token depuis le localStorage. Ajout d'un guard sur `authLoading` pour éviter la redirection prématurée.
 
 ---
 
