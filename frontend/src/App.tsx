@@ -7,6 +7,7 @@ import Register from './pages/Register'
 import Login from './pages/Login'
 import Download from './pages/Download'
 import MySpace from './pages/MySpace'
+import NotFound from './pages/NotFound'
 import './App.css'
 
 function App() {
@@ -25,6 +26,7 @@ function App() {
                   <Route path="/register" element={<Register />} />
                   <Route path="/login" element={<Login />} />
                   <Route path="/download/:token" element={<Download />} />
+                  <Route path="*" element={<NotFound />} />
                 </Routes>
               </main>
               <Footer />
