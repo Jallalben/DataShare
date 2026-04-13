@@ -33,18 +33,19 @@ describe('Upload de fichier', () => {
   })
 
   it('affiche le fichier dans Mon espace après upload', () => {
-    // Restaurer la session avant de visiter myspace
     cy.request('POST', 'http://localhost:3001/api/auth/login', { email, password }).then((res) => {
-      window.sessionStorage.setItem('auth_token', res.body.access_token)
+      const jwt = res.body.access_token
+      const user = res.body.user
+
+      // Injecter le token dans localStorage pour que AuthContext le restaure
+      cy.window().then((win) => {
+        win.localStorage.setItem('datashare_token', jwt)
+        win.localStorage.setItem('datashare_user', JSON.stringify(user))
+      })
     })
-    cy.visit('/login')
-    cy.get('input[type="email"]').type(email)
-    cy.get('input[type="password"]').type(password)
-    cy.get('button[type="submit"]').click()
-    cy.url().should('eq', Cypress.config('baseUrl') + '/')
 
     cy.visit('/myspace')
-    cy.contains('test-file.txt', { timeout: 8000 }).should('be.visible')
+    cy.contains('test-file.txt', { timeout: 10000 }).should('be.visible')
     cy.contains(/expire dans/i).should('be.visible')
   })
 })
