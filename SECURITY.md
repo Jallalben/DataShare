@@ -60,7 +60,7 @@ Pour aller plus loin, Snyk peut scanner les images Docker en plus des bibliothè
 Quelques améliorations sont envisageables pour une version production :
 
 - **Rate limiting** sur les endpoints d'authentification pour limiter les tentatives de connexion par force brute.
-- **Protection CORS** configurée explicitement plutôt que ouverte à toutes les origines.
+- **Protection CORS** — actuellement `enableCors()` est appelé sans restriction d'origine dans `main.ts`. À restreindre aux domaines autorisés en production.
 - **Headers HTTP de sécurité** (Content-Security-Policy, X-Frame-Options, etc.) via un middleware comme Helmet.
 - **Validation du contenu réel du fichier** par analyse de signature binaire (magic bytes), indépendamment de l'extension et du type MIME déclaré.
 

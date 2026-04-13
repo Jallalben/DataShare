@@ -48,12 +48,6 @@ L'idée de DataShare est de pouvoir envoyer un fichier rapidement et de décider
 
 ---
 
-## Architecture technique
-
-![Architecture Technique](./architecture.png)
-
----
-
 ## Stack technique
 
 | Couche              | Technologie                        | Version    |
