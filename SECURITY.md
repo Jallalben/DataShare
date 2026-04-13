@@ -1,6 +1,6 @@
 # Sécurité — DataShare
 
-La sécurité n'est pas une option que j'ai ajoutée à la fin — c'est une contrainte que j'ai intégrée dès la conception de chaque fonctionnalité. Ce document explique concrètement ce qui est en place et pourquoi chaque choix a été fait.
+Ce document explique concrètement ce qui est en place côté sécurité et pourquoi chaque choix a été fait.
 
 ---
 
@@ -8,7 +8,7 @@ La sécurité n'est pas une option que j'ai ajoutée à la fin — c'est une con
 
 Les mots de passe ne sont jamais stockés en clair dans la base de données. J'utilise **bcrypt** avec 12 rounds de hachage. Concrètement, même si quelqu'un accédait directement à la base de données, il ne verrait qu'une chaîne de caractères illisible — jamais le mot de passe original. 12 rounds représente un bon équilibre entre sécurité et performance : suffisamment lent pour décourager les attaques par force brute, suffisamment rapide pour ne pas pénaliser la connexion d'un utilisateur légitime.
 
-Les sessions sont gérées par des **tokens JWT** (JSON Web Token). Chaque token est signé avec une clé secrète définie dans les variables d'environnement et expire automatiquement après 24 heures. Le token est transmis dans l'en-tête `Authorization: Bearer <token>` à chaque requête protégée — jamais dans l'URL.
+Les sessions sont gérées par des **tokens JWT** (JSON Web Token). Chaque token est signé avec une clé secrète définie dans les variables d'environnement et expire automatiquement après 24 heures. Le token est persisté dans le `localStorage` du navigateur et transmis dans l'en-tête `Authorization: Bearer <token>` à chaque requête protégée — jamais dans l'URL.
 
 ---
 

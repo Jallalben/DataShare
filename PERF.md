@@ -6,11 +6,11 @@ L'objectif est que l'application soit rapide et fluide à utiliser, sans temps d
 
 ## Côté interface
 
-Je mesure les performances frontend avec **Lighthouse**, l'outil d'audit intégré à Chrome. Les cibles que je vise sont les suivantes : chargement initial de la page sous une seconde sur une connexion standard, interaction visuelle immédiate (pas de blocage au clic), et un bon score SEO pour la page d'accueil publique.
+Je mesure les performances frontend avec **Lighthouse**, l'outil d'audit intégré à Chrome. Les points que je surveille : temps de chargement initial, fluidité des interactions, et score SEO pour la page d'accueil publique.
 
 Le bundle JavaScript est produit par **Vite**, qui applique automatiquement le tree-shaking (suppression du code non utilisé) et le code splitting (chargement à la demande). Résultat : le navigateur ne télécharge que ce dont il a besoin au moment où il en a besoin — pas la totalité de l'application d'un coup.
 
-React 19 apporte des optimisations de rendu internes qui réduisent les re-rendus inutiles. Je veille à ne pas passer de fonctions anonymes dans les props des composants fréquemment re-rendus, ce qui forcerait React à recalculer inutilement.
+React 19 apporte des optimisations de rendu internes qui réduisent les re-rendus inutiles sur les composants à état fréquent comme la barre de progression de l'upload.
 
 ---
 

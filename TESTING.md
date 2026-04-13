@@ -1,6 +1,6 @@
 # Stratégie de tests — DataShare
 
-Tester n'est pas une contrainte que je subis — c'est ce qui me permet de livrer chaque phase avec confiance. Ce document décrit comment les tests sont organisés, ce qu'ils couvrent, et comment les lancer.
+Ce document décrit comment les tests sont organisés, ce qu'ils couvrent concrètement, et comment les lancer.
 
 ---
 
@@ -66,7 +66,7 @@ Les **tests E2E** simulent un utilisateur réel dans un vrai navigateur. Avec Cy
 
 **Backend (Supertest — intégration)** : `GET /api/files/my` retourne 200 avec la liste complète des fichiers de l'utilisateur connecté, `expiresAt` est inclus dans chaque entrée.
 
-**Frontend (Cypress — E2E)** : les fichiers uploadés apparaissent bien dans Mon espace avec leurs métadonnées, le lien de partage est copié correctement.
+**Frontend (Cypress — E2E)** : après upload, le fichier apparaît dans Mon espace avec son nom et sa date d'expiration.
 
 ---
 
@@ -76,7 +76,7 @@ Les **tests E2E** simulent un utilisateur réel dans un vrai navigateur. Avec Cy
 
 **Backend (Supertest — intégration)** : `DELETE /api/files/:id` retourne 204 No Content après suppression réussie, retourne 403 si le fichier appartient à un autre utilisateur, retourne 401 sans JWT.
 
-**Frontend (Cypress — E2E)** : le bouton de suppression est visible pour chaque fichier, le fichier disparaît de la liste après confirmation, aucun rechargement de page n'est nécessaire.
+**Frontend (Cypress — E2E)** : le fichier disparaît de la liste après confirmation de suppression.
 
 ---
 

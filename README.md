@@ -72,7 +72,7 @@ L'idée de DataShare est de pouvoir envoyer un fichier rapidement et de décider
 ## Sécurité
 
 - Mots de passe hachés avec **bcrypt** (12 rounds).
-- Sessions gérées via **JWT** (24h, stocké en mémoire côté client).
+- Sessions gérées via **JWT** (24h, token persisté en `localStorage`).
 - Liens de partage avec **UUID v4** (impossibles à deviner).
 - Expiration configurable de 1 à 7 jours, purge automatique toutes les heures.
 - Types de fichiers exécutables bloqués à l'upload.
