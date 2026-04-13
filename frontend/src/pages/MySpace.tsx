@@ -39,7 +39,7 @@ function isExpired(file: FileItem): boolean {
 }
 
 export default function MySpace() {
-  const { token, user, logout } = useAuth()
+  const { token, user, logout, loading: authLoading } = useAuth()
   const navigate = useNavigate()
   const [files, setFiles] = useState<FileItem[]>([])
   const [loading, setLoading] = useState(true)
@@ -48,13 +48,14 @@ export default function MySpace() {
   const [deletingId, setDeletingId] = useState<string | null>(null)
 
   useEffect(() => {
+    if (authLoading) return
     if (!token) { navigate('/login'); return }
     apiClient
       .get<FileItem[]>('/files/my', { headers: { Authorization: `Bearer ${token}` } })
       .then(({ data }) => setFiles(data))
       .catch(() => setFiles([]))
       .finally(() => setLoading(false))
-  }, [token, navigate])
+  }, [token, authLoading, navigate])
 
   const handleDelete = async (file: FileItem) => {
     if (!window.confirm(`Supprimer "${file.originalName}" ? Cette action est irréversible.`)) return
