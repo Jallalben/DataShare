@@ -117,10 +117,57 @@ jobs:
         run: npm run test
 
   # ─────────────────────────────────────────
-  # 4. Build de vérification
+  # 4. Tests E2E Cypress
+  # ─────────────────────────────────────────
+  cypress-e2e:
+    name: E2E — Tests Cypress
+    runs-on: ubuntu-latest
+    needs: [backend-unit, frontend-unit]
+
+    steps:
+      - name: Checkout du code
+        uses: actions/checkout@v4
+
+      - name: Démarrage de la stack complète
+        run: docker compose up -d --build
+        env:
+          DB_NAME: datashare
+          DB_USER: datashare
+          DB_PASSWORD: datashare123
+          JWT_SECRET: ci_secret_key
+
+      - name: Attente que l'application soit prête
+        run: |
+          echo "Attente du backend..."
+          timeout 90 bash -c 'until curl -sf http://localhost:3001/api/health; do sleep 3; done'
+          echo "Attente du frontend..."
+          timeout 60 bash -c 'until curl -sf http://localhost:3000; do sleep 3; done'
+
+      - name: Installation de Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
+
+      - name: Installation des dépendances
+        run: npm install
+
+      - name: Lancement des tests Cypress
+        run: npm run cy:run
+
+      - name: Upload des captures Cypress en cas d'échec
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots/
+
+  # ─────────────────────────────────────────
+  # 5. Build de vérification
   # ─────────────────────────────────────────
   build-check:
-    name: 🏗️ Vérification du build
+    name: Vérification du build
     runs-on: ubuntu-latest
     needs: [backend-unit, frontend-unit]
 
