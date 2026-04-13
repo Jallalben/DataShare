@@ -5,6 +5,7 @@ import {
   CreateDateColumn,
   ManyToOne,
   JoinColumn,
+  Index,
 } from 'typeorm';
 import { User } from '../users/user.entity';
 
@@ -29,6 +30,7 @@ export class File {
   @JoinColumn({ name: 'userId' })
   user: User;
 
+  @Index()
   @Column()
   userId: string;
 
