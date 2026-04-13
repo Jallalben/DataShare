@@ -95,6 +95,7 @@ L'application est accessible sur :
 
 - **Interface** : `http://localhost:3000`
 - **API** : `http://localhost:3001/api`
+- **Documentation API** : `http://localhost:3001/api/docs`
 - **Santé** : `http://localhost:3001/api/health`
 
 ---

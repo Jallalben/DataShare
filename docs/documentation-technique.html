@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DataShare — Documentation technique</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Georgia', serif;
+      font-size: 14px;
+      line-height: 1.75;
+      color: #1a1a1a;
+      background: #fff;
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 60px 48px;
+    }
+
+    /* ── Cover ── */
+    .cover {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding-bottom: 60px;
+      border-bottom: 2px solid #1a1a1a;
+      margin-bottom: 80px;
+      page-break-after: always;
+    }
+    .cover-label {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 32px;
+    }
+    .cover h1 {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 52px;
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 24px;
+    }
+    .cover-sub {
+      font-size: 16px;
+      color: #555;
+      max-width: 480px;
+      line-height: 1.6;
+      margin-bottom: 48px;
+    }
+    .cover-meta {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 12px;
+      color: #888;
+    }
+    .cover-meta span { margin-right: 32px; }
+
+    /* ── TOC ── */
+    .toc {
+      page-break-after: always;
+      margin-bottom: 80px;
+    }
+    .toc h2 {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 24px;
+    }
+    .toc ol {
+      list-style: none;
+      counter-reset: toc;
+    }
+    .toc ol li {
+      counter-increment: toc;
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+      padding: 10px 0;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 14px;
+    }
+    .toc ol li::before {
+      content: counter(toc, decimal-leading-zero);
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 11px;
+      color: #aaa;
+      min-width: 28px;
+    }
+    .toc ol li span { color: #888; font-size: 12px; margin-left: auto; }
+
+    /* ── Sections ── */
+    section {
+      margin-bottom: 64px;
+      page-break-inside: avoid;
+    }
+    .section-label {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #bbb;
+      margin-bottom: 12px;
+    }
+    h2.section-title {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 28px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid #1a1a1a;
+    }
+    h3 {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      margin: 28px 0 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    p { margin-bottom: 14px; }
+    ul, ol { padding-left: 20px; margin-bottom: 14px; }
+    ul li, ol li { margin-bottom: 6px; }
+
+    /* ── Architecture diagram ── */
+    .arch {
+      background: #fafafa;
+      border: 1px solid #e8e8e8;
+      border-radius: 8px;
+      padding: 32px;
+      margin: 24px 0;
+      font-family: 'Helvetica Neue', sans-serif;
+    }
+    .arch-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin: 8px 0;
+    }
+    .arch-box {
+      background: #fff;
+      border: 1.5px solid #1a1a1a;
+      border-radius: 6px;
+      padding: 10px 18px;
+      font-size: 12px;
+      font-weight: 600;
+      text-align: center;
+      min-width: 130px;
+    }
+    .arch-box.gray {
+      border-color: #ccc;
+      color: #555;
+      font-weight: 400;
+    }
+    .arch-box small {
+      display: block;
+      font-size: 10px;
+      font-weight: 400;
+      color: #888;
+      margin-top: 2px;
+    }
+    .arch-arrow {
+      font-size: 18px;
+      color: #aaa;
+    }
+    .arch-section-label {
+      font-size: 10px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #aaa;
+      text-align: center;
+      margin: 20px 0 8px;
+    }
+    .arch-divider {
+      border: none;
+      border-top: 1px dashed #ddd;
+      margin: 16px 0;
+    }
+
+    /* ── Data model ── */
+    .model-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 12px;
+      margin: 16px 0 28px;
+    }
+    .model-table th {
+      background: #1a1a1a;
+      color: #fff;
+      padding: 8px 12px;
+      text-align: left;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+    .model-table td {
+      padding: 8px 12px;
+      border-bottom: 1px solid #eee;
+      vertical-align: top;
+    }
+    .model-table tr:last-child td { border-bottom: none; }
+    .model-table tr:hover td { background: #fafafa; }
+    .badge {
+      display: inline-block;
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 99px;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+    }
+    .badge-pk { background: #fff3cd; color: #856404; border: 1px solid #ffc107; }
+    .badge-fk { background: #cfe2ff; color: #0a58ca; border: 1px solid #6ea8fe; }
+    .badge-auto { background: #d1e7dd; color: #0a3622; border: 1px solid #a3cfbb; }
+
+    /* ── Endpoints ── */
+    .endpoint {
+      border: 1px solid #e8e8e8;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+    .endpoint-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: #fafafa;
+      border-bottom: 1px solid #e8e8e8;
+    }
+    .method {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      min-width: 52px;
+      text-align: center;
+    }
+    .method.get { background: #d1e7dd; color: #0a3622; }
+    .method.post { background: #cfe2ff; color: #0a58ca; }
+    .method.delete { background: #f8d7da; color: #842029; }
+    .endpoint-path {
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .endpoint-auth {
+      margin-left: auto;
+      font-size: 10px;
+      color: #888;
+      font-family: 'Helvetica Neue', sans-serif;
+    }
+    .endpoint-body { padding: 12px 16px; font-size: 13px; }
+    .endpoint-body p { margin-bottom: 6px; }
+    .tag-list { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+    .tag {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 10px;
+      padding: 2px 8px;
+      background: #f0f0f0;
+      border-radius: 99px;
+      color: #555;
+    }
+
+    /* ── Callout ── */
+    .callout {
+      border-left: 3px solid #1a1a1a;
+      padding: 14px 18px;
+      background: #fafafa;
+      margin: 20px 0;
+      font-size: 13px;
+    }
+    .callout.warning { border-color: #f59e0b; background: #fffbeb; }
+
+    /* ── AI section ── */
+    .ai-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin: 20px 0;
+    }
+    .ai-card {
+      border: 1px solid #e8e8e8;
+      border-radius: 8px;
+      padding: 16px;
+    }
+    .ai-card h4 {
+      font-family: 'Helvetica Neue', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .ai-card p { font-size: 12px; color: #444; margin: 0; }
+
+    /* ── Print ── */
+    @media print {
+      body { padding: 40px 36px; font-size: 12px; }
+      .cover { page-break-after: always; }
+      .toc { page-break-after: always; }
+      section { page-break-inside: avoid; }
+      h2.section-title { page-break-after: avoid; }
+      h3 { page-break-after: avoid; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════ COVER ═══════════════════════════════════ -->
+  <div class="cover">
+    <div class="cover-label">Documentation technique</div>
+    <h1>DataShare</h1>
+    <p class="cover-sub">
+      Plateforme de partage de fichiers avec liens temporaires et sécurisés.
+      Ce document présente l'architecture, les choix techniques, le modèle de données
+      et les fonctionnalités principales de l'application.
+    </p>
+    <div class="cover-meta">
+      <span>Version 1.0.0</span>
+      <span>Avril 2026</span>
+      <span>Benhemala Jallal</span>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════ TOC ═══════════════════════════════════ -->
+  <div class="toc">
+    <h2>Sommaire</h2>
+    <ol>
+      <li>Présentation générale <span>p. 2</span></li>
+      <li>Architecture de l'application <span>p. 3</span></li>
+      <li>Justification des choix technologiques <span>p. 4</span></li>
+      <li>Modèle de données <span>p. 5</span></li>
+      <li>Documentation des endpoints principaux <span>p. 6</span></li>
+      <li>Sécurité et gestion des accès <span>p. 8</span></li>
+      <li>Qualité, tests et maintenance <span>p. 9</span></li>
+      <li>Installation et exécution <span>p. 10</span></li>
+      <li>Utilisation de l'IA dans le développement <span>p. 11</span></li>
+    </ol>
+  </div>
+
+  <!-- ═══════════════════════════════════ 1. PRÉSENTATION ═══════════════════════════════════ -->
+  <section>
+    <div class="section-label">Section 01</div>
+    <h2 class="section-title">Présentation générale</h2>
+
+    <p>
+      DataShare est une application web qui permet d'envoyer un fichier à quelqu'un en lui partageant
+      un lien. Ce lien est temporaire : il expire automatiquement après une durée choisie par l'expéditeur,
+      entre 1 et 7 jours. Une fois le délai dépassé, le fichier est supprimé du serveur — aucune donnée
+      ne reste accessible ou stockée silencieusement.
+    </p>
+    <p>
+      L'application est destinée à des utilisateurs qui ont besoin d'un moyen rapide et sécurisé
+      de partager des fichiers sans passer par email ou par un service cloud permanent.
+    </p>
+
+    <h3>Fonctionnalités principales</h3>
+    <ul>
+      <li><strong>Inscription et connexion</strong> — chaque utilisateur dispose d'un compte personnel protégé par mot de passe.</li>
+      <li><strong>Upload de fichiers</strong> — jusqu'à 50 Mo, avec choix de la durée d'expiration (1 à 7 jours).</li>
+      <li><strong>Lien de partage</strong> — un lien unique est généré à chaque upload, accessible sans compte pour le destinataire.</li>
+      <li><strong>Mon espace</strong> — tableau de bord personnel listant les fichiers actifs et expirés, avec possibilité de supprimer.</li>
+      <li><strong>Purge automatique</strong> — les fichiers expirés sont supprimés automatiquement toutes les heures côté serveur.</li>
+    </ul>
+  </section>
+
+  <!-- ═══════════════════════════════════ 2. ARCHITECTURE ═══════════════════════════════════ -->
+  <section>
+    <div class="section-label">Section 02</div>
+    <h2 class="section-title">Architecture de l'application</h2>
+
+    <p>
+      L'application est découpée en trois blocs indépendants qui communiquent entre eux :
+      l'interface utilisateur, le serveur, et la base de données. Chaque bloc tourne dans son propre
+      conteneur Docker et peut être mis à jour sans toucher aux autres.
+    </p>
+
+    <div class="arch">
+      <div class="arch-section-label">Navigateur de l'utilisateur</div>
+      <div class="arch-row">
+        <div class="arch-box">
+          Navigateur
+          <small>Interface React</small>
+        </div>
+      </div>
+
+      <hr class="arch-divider" />
+      <div class="arch-section-label">Réseau Docker interne</div>
+
+      <div class="arch-row">
+        <div class="arch-box">
+          Frontend
+          <small>React + Vite · port 3000</small>
+        </div>
+        <div class="arch-arrow">⟷</div>
+        <div class="arch-box">
+          Backend API
+          <small>NestJS · port 3001</small>
+        </div>
+        <div class="arch-arrow">⟷</div>
+        <div class="arch-box">
+          Base de données
+          <small>PostgreSQL · port 5432</small>
+        </div>
+      </div>
+
+      <hr class="arch-divider" />
+      <div class="arch-section-label">Stockage persistant (volumes Docker)</div>
+
+      <div class="arch-row">
+        <div class="arch-box gray">
+          uploads/
+          <small>Fichiers physiques</small>
+        </div>
+        <div class="arch-box gray">
+          postgres_data/
+          <small>Données utilisateurs</small>
+        </div>
+      </div>
+    </div>
+
+    <h3>Flux d'une action typique</h3>
+    <p>
+      Quand un utilisateur uploade un fichier, voici ce qui se passe dans l'ordre :
+    </p>
+    <ol>
+      <li>Le navigateur envoie le fichier au backend via une requête HTTP sécurisée.</li>
+      <li>Le backend vérifie le token d'authentification, valide le fichier, puis le sauvegarde sur le disque.</li>
+      <li>Un enregistrement est créé en base de données avec les métadonnées (nom, taille, date d'expiration) et un identifiant unique pour le lien de partage.</li>
+      <li>Le lien est renvoyé au navigateur et affiché à l'utilisateur pour qu'il puisse le copier.</li>
+    </ol>
+
+    <div class="callout">
+      Le lien de partage fonctionne sans compte. Le destinataire clique sur le lien, voit les informations
+      du fichier et peut le télécharger directement — sans inscription ni connexion.
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════ 3. CHOIX TECH ═══════════════════════════════════ -->
+  <section>
+    <div class="section-label">Section 03</div>
+    <h2 class="section-title">Justification des choix technologiques</h2>
+
+    <h3>NestJS pour le backend</h3>
+    <p>
+      J'ai choisi NestJS parce qu'il impose une structure claire dès le départ : chaque fonctionnalité
+      (authentification, fichiers, tâches planifiées) vit dans son propre module indépendant.
+      Cela rend le code facile à lire, à tester et à faire évoluer sans toucher au reste de l'application.
+      NestJS est construit sur Node.js, ce qui permet de gérer plusieurs requêtes simultanées sans ralentissement,
+      un point important pour une application de transfert de fichiers.
+    </p>
+
+    <h3>React pour le frontend</h3>
+    <p>
+      React est la bibliothèque la plus répandue pour construire des interfaces web interactives.
+      L'interface de DataShare — modale d'upload, barre de progression, tableau de bord — est
+      composée de blocs réutilisables. React permet de les assembler proprement et de mettre à jour
+      uniquement ce qui change à l'écran, ce qui donne une navigation fluide sans rechargement de page.
+    </p>
+
+    <h3>PostgreSQL pour la base de données</h3>
+    <p>
+      PostgreSQL est une base de données relationnelle robuste et fiable, idéale pour stocker les
+      informations structurées de DataShare : utilisateurs, fichiers, tokens de partage, dates d'expiration.
+      Son système de contraintes garantit l'intégrité des données — par exemple, on ne peut pas créer
+      un fichier sans l'associer à un utilisateur existant.
+    </p>
+
+    <h3>Docker pour l'infrastructure</h3>
+    <p>
+      Docker permet d'empaqueter l'application avec toutes ses dépendances dans des conteneurs isolés.
+      Le résultat : l'application fonctionne de manière identique sur n'importe quelle machine,
+      que ce soit pour le développement, les tests ou la production. Une seule commande suffit pour
+      démarrer l'ensemble de la stack.
+    </p>
+
+    <h3>JWT pour l'authentification</h3>
+    <p>
+      Les tokens JWT (JSON Web Token) permettent de vérifier l'identité d'un utilisateur sans stocker
+      d'information de session côté serveur. Le backend génère un token signé à la connexion.
+      Ce token est ensuite présenté par le navigateur à chaque requête sensible — le serveur vérifie
+      la signature et identifie l'utilisateur sans consulter la base de données.
+    </p>
+
+    <h3>GitHub Actions pour l'intégration continue</h3>
+    <p>
+      À chaque modification du code poussée sur le dépôt, GitHub Actions lance automatiquement
+      l'ensemble des tests — unitaires, d'intégration et navigateur. Si un test échoue, le code
+      ne peut pas être considéré comme stable. Ce processus automatique évite les régressions
+      et garantit qu'une fonctionnalité qui marche continue de marcher après chaque évolution.
+    </p>
+  </section>
+
+  <!-- ═══════════════════════════════════ 4. MODÈLE DE DONNÉES ═══════════════════════════════════ -->
+  <section>
+    <div class="section-label">Section 04</div>
+    <h2 class="section-title">Modèle de données</h2>
+
+    <p>
+      La base de données contient deux tables : les utilisateurs et les fichiers.
+      Un utilisateur peut avoir plusieurs fichiers. Chaque fichier appartient à un seul utilisateur.
+    </p>
+
+    <h3>Table : users</h3>
+    <table class="model-table">
+      <thead>
+        <tr>
+          <th>Champ</th>
+          <th>Type</th>
+          <th>Rôle</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>id</strong> <span class="badge badge-pk">PK</span></td>
+          <td>UUID</td>
+          <td>Identifiant unique de l'utilisateur, généré automatiquement.</td>
+        </tr>
+        <tr>
+          <td><strong>email</strong></td>
+          <td>Texte</td>
+          <td>Adresse email, unique dans la base. Sert d'identifiant de connexion.</td>
+        </tr>
+        <tr>
+          <td><strong>password</strong></td>
+          <td>Texte</td>
+          <td>Mot de passe haché avec bcrypt. Jamais stocké en clair.</td>
+        </tr>
+        <tr>
+          <td><strong>createdAt</strong> <span class="badge badge-auto">auto</span></td>
+          <td>Date</td>
+          <td>Date et heure de création du compte.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Table : files</h3>
+    <table class="model-table">
+      <thead>
+        <tr>
+          <th>Champ</th>
+          <th>Type</th>
+          <th>Rôle</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>id</strong> <span class="badge badge-pk">PK</span></td>
+          <td>UUID</td>
+          <td>Identifiant unique du fichier.</td>
+        </tr>
+        <tr>
+          <td><strong>userId</strong> <span class="badge badge-fk">FK</span></td>
+          <td>UUID</td>
+          <td>Référence à l'utilisateur propriétaire du fichier.</td>
+        </tr>
+        <tr>
+          <td><strong>originalName</strong></td>
+          <td>Texte</td>
+          <td>Nom original du fichier tel qu'envoyé par l'utilisateur.</td>
+        </tr>
+        <tr>
+          <td><strong>filename</strong></td>
+          <td>Texte</td>
+          <td>Nom stocké sur le disque — UUID généré pour éviter les conflits.</td>
+        </tr>
+        <tr>
+          <td><strong>mimetype</strong></td>
+          <td>Texte</td>
+          <td>Type de contenu du fichier (ex. image/png, application/pdf).</td>
+        </tr>
+        <tr>
+          <td><strong>size</strong></td>
+          <td>Nombre</td>
+          <td>Taille du fichier en octets.</td>
+        </tr>
+        <tr>
+          <td><strong>downloadToken</strong></td>
+          <td>UUID</td>
+          <td>Identifiant unique du lien de partage. Inclus dans l'URL publique.</td>
+        </tr>
+        <tr>
+          <td><strong>createdAt</strong> <span class="badge badge-auto">auto</span></td>
+          <td>Date</td>
+          <td>Date et heure de l'upload.</td>
+        </tr>
+        <tr>
+          <td><strong>expiresAt</strong></td>
+          <td>Date</td>
+          <td>Date à laquelle le lien expire et le fichier est supprimé.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout">
+      La relation entre les deux tables : un utilisateur peut avoir plusieurs fichiers,
+      mais chaque fichier appartient à un seul utilisateur. Si un utilisateur est supprimé,
+      ses fichiers sont supprimés en cascade.
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════ 5. ENDPOINTS ═══════════════════════════════════ -->
+  <section>
+    <div class="section-label">Section 05</div>
+    <h2 class="section-title">Documentation des endpoints principaux</h2>
+
+    <p>
+      L'API dispose d'une documentation interactive générée automatiquement via Swagger.
+      Elle est accessible à l'adresse <code>http://localhost:3001/api/docs</code> lorsque l'application tourne.
+    </p>
+    <p>
+      Cette interface liste tous les endpoints disponibles, détaille les paramètres attendus et les réponses possibles,
+      et permet de tester chaque appel directement depuis le navigateur — sans outil externe.
+      Pour les endpoints protégés, il suffit de cliquer sur <strong>Authorize</strong> en haut à droite
+      et de coller le token JWT obtenu à la connexion.
+    </p>
+
+    <div class="callout">
+      La documentation interactive est la référence à jour pour tous les endpoints.
+      Le tableau ci-dessous en présente un résumé pour lecture hors ligne.
+    </div>
+
+    <h3>Authentification</h3>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method post">POST</span>
+        <span class="endpoint-path">/auth/register</span>
+        <span class="endpoint-auth">Public</span>
+      </div>
+      <div class="endpoint-body">
+        <p>Crée un nouveau compte utilisateur.</p>
+        <p><strong>Corps de la requête :</strong> email (texte), password (texte, min. 6 caractères).</p>
+        <p><strong>Réponse réussie :</strong> 201 — identifiant, email et date de création du compte.</p>
+        <div class="tag-list">
+          <span class="tag">409 si l'email est déjà utilisé</span>
+          <span class="tag">400 si les données sont invalides</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method post">POST</span>
+        <span class="endpoint-path">/auth/login</span>
+        <span class="endpoint-auth">Public</span>
+      </div>
+      <div class="endpoint-body">
+        <p>Connecte un utilisateur et retourne un token d'accès.</p>
+        <p><strong>Corps de la requête :</strong> email, password.</p>
+        <p><strong>Réponse réussie :</strong> 200 — token JWT valable 24h + informations de l'utilisateur.</p>
+        <div class="tag-list">
+          <span class="tag">401 si les identifiants sont incorrects</span>
+        </div>
+      </div>
+    </div>
+
+    <h3>Fichiers</h3>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method post">POST</span>
+        <span class="endpoint-path">/files/upload</span>
+        <span class="endpoint-auth">Authentification requise</span>
+      </div>
+      <div class="endpoint-body">
+        <p>Uploade un fichier et retourne le lien de partage.</p>
+        <p><strong>Corps de la requête :</strong> fichier (multipart/form-data), expirationDays (1 à 7, optionnel — 7 par défaut).</p>
+        <p><strong>Réponse réussie :</strong> 201 — nom, taille, type, token de partage, date d'expiration.</p>
+        <div class="tag-list">
+          <span class="tag">400 si aucun fichier ou type interdit</span>
+          <span class="tag">401 sans token</span>
+          <span class="tag">Taille max : 50 Mo</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method get">GET</span>
+        <span class="endpoint-path">/files/my</span>
+        <span class="endpoint-auth">Authentification requise</span>
+      </div>
+      <div class="endpoint-body">
+        <p>Retourne la liste des fichiers uploadés par l'utilisateur connecté, triés du plus récent au plus ancien.</p>
+        <p><strong>Réponse réussie :</strong> 200 — tableau de fichiers avec métadonnées et date d'expiration.</p>
+        <div class="tag-list">
+          <span class="tag">401 sans token</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method get">GET</span>
+        <span class="endpoint-path">/files/info/:token</span>
+        <span class="endpoint-auth">Public</span>
+      </div>
+      <div class="endpoint-body">
+        <p>Retourne les métadonnées d'un fichier à partir de son token de partage. Utilisé par la page de téléchargement pour afficher les informations avant de télécharger.</p>
+        <p><strong>Réponse réussie :</strong> 200 — nom, taille, type, dates de création et d'expiration.</p>
+        <div class="tag-list">
+          <span class="tag">404 si le token est inconnu</span>
+          <span class="tag">410 si le lien a expiré</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method get">GET</span>
+        <span class="endpoint-path">/files/download/:token</span>
+        <span class="endpoint-auth">Public</span>
+      </div>
+      <div class="endpoint-body">
+        <p>Déclenche le téléchargement du fichier. Le serveur envoie le contenu du fichier directement au navigateur.</p>
+        <p><strong>Réponse réussie :</strong> 200 — flux binaire du fichier avec en-tête de téléchargement.</p>
+        <div class="tag-list">
+          <span class="tag">404 si le token est inconnu</span>
+          <span class="tag">410 si le lien a expiré</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method delete">DELETE</span>
+        <span class="endpoint-path">/files/:id</span>
+        <span class="endpoint-auth">Authentification requise</span>
+      </div>
+      <div class="endpoint-body">
+        <p>Supprime un fichier. Seul le propriétaire peut supprimer son propre fichier.</p>
+        <p><strong>Réponse réussie :</strong> 204 — aucun contenu (suppression confirmée).</p>
+        <div class="tag-list">
+          <span class="tag">401 sans token</span>
+          <span class="tag">403 si le fichier appartient à un autre utilisateur</span>
+          <span class="tag">404 si le fichier n'existe pas</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-header">
+        <span class="method get">GET</span>
+        <span class="endpoint-path">/health</span>
+        <span class="endpoint-auth">Public</span>
+      </div>
+      <div class="endpoint-body">
+        <p>Vérifie que le serveur est opérationnel. Utilisé par Docker pour surveiller l'état du service.</p>
+        <p><strong>Réponse réussie :</strong> 200 — <code>{ "status": "ok" }</code></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════ 6. SÉCURITÉ ═══════════════════════════════════ -->
+  <section>
+    <div class="section-label">Section 06</div>
+    <h2 class="section-title">Sécurité et gestion des accès</h2>
+
+    <h3>Mots de passe</h3>
+    <p>
+      Les mots de passe ne sont jamais stockés tels quels. J'utilise bcrypt, un algorithme de hachage
+      conçu spécifiquement pour les mots de passe. Même avec un accès direct à la base de données,
+      un attaquant ne verrait qu'une suite de caractères illisible — retrouver le mot de passe original
+      est impossible en pratique.
+    </p>
+
+    <h3>Sessions et tokens</h3>
+    <p>
+      Après connexion, l'application génère un token JWT signé, valable 24 heures. Ce token est
+      présenté à chaque action sensible (upload, consultation de la liste, suppression).
+      Le serveur vérifie la signature du token sans avoir à consulter la base de données à chaque fois.
+      Passé 24h, le token expire et l'utilisateur doit se reconnecter.
+    </p>
+
+    <h3>Liens de partage</h3>
+    <p>
+      Chaque lien de partage contient un UUID v4 — un identifiant de 122 bits générés aléatoirement.
+      La probabilité de tomber par hasard sur un lien valide est astronomiquement faible.
+      Il faut connaître le lien exact pour accéder à un fichier.
+    </p>
+
+    <h3>Filtrage des fichiers uploadés</h3>
+    <p>
+      Les fichiers exécutables sont bloqués à l'upload — extensions
+      <code>.exe</code>, <code>.bat</code>, <code>.sh</code>, <code>.cmd</code>, <code>.msi</code>,
+      <code>.ps1</code>, <code>.vbs</code> — ainsi que les types MIME correspondants.
+      La taille maximale acceptée est de 50 Mo par fichier.
+    </p>
+
+    <h3>Expiration automatique</h3>
+    <p>
+      Chaque fichier a une date d'expiration. Un processus automatique tourne toutes les heures
+      et supprime définitivement les fichiers expirés — base de données et disque.
+      Aucune donnée ne reste accessible après expiration.
+    </p>
+
+    <div class="callout warning">
+      Points d'amélioration identifiés pour une mise en production : limiter le nombre de tentatives
+      de connexion par minute (rate limiting), restreindre les origines CORS aux domaines autorisés,
+      et ajouter des en-têtes HTTP de sécurité via un middleware dédié.
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════ 7. QUALITÉ ═══════════════════════════════════ -->
+  <section>
+    <div class="section-label">Section 07</div>
+    <h2 class="section-title">Qualité, tests et maintenance</h2>
+
+    <h3>Stratégie de tests</h3>
+    <p>
+      J'ai mis en place trois niveaux de tests qui se complètent :
+    </p>
+    <ul>
+      <li>
+        <strong>Tests unitaires</strong> — vérifient la logique de chaque fonction isolément.
+        11 tests au total : 4 côté backend (Jest), 7 côté frontend (Vitest).
+      </li>
+      <li>
+        <strong>Tests d'intégration</strong> — vérifient que les endpoints API fonctionnent correctement
+        avec une vraie base de données PostgreSQL.
+      </li>
+      <li>
+        <strong>Tests navigateur (E2E)</strong> — Cypress simule un utilisateur réel : inscription,
+        connexion, upload, téléchargement. 6 scénarios couverts, exécutés dans un vrai navigateur.
+      </li>
+    </ul>
+
+    <h3>Intégration continue</h3>
+    <p>
+      GitHub Actions lance automatiquement tous les tests à chaque modification du code.
+      Si un test échoue, la modification est signalée immédiatement — avant qu'elle n'affecte
+      qui que ce soit. Les tests E2E s'exécutent dans un environnement Docker identique à la production.
+    </p>
+
+    <h3>Maintenance</h3>
+    <p>
+      La purge automatique des fichiers expirés est la seule tâche de maintenance récurrente —
+      elle est entièrement automatisée. Pour le reste, je vérifie les dépendances avec
+      <code>npm audit</code> régulièrement pour détecter les failles de sécurité connues.
+      Les mises à jour de l'application se déploient sans interruption grâce à Docker.
+    </p>
+
+    <h3>Versionnage</h3>
+    <p>
+      Chaque phase du projet correspond à un tag Git versionné : de <code>v1.0-phase1-done</code>
+      à <code>v1.0.0</code>. Il est possible de revenir à n'importe quel état antérieur de l'application
+      en quelques secondes.
+    </p>
+  </section>
+
+  <!-- ═══════════════════════════════════ 8. INSTALLATION ═══════════════════════════════════ -->
+  <section>
+    <div class="section-label">Section 08</div>
+    <h2 class="section-title">Installation et exécution</h2>
+
+    <h3>Prérequis</h3>
+    <p>
+      Une seule dépendance est nécessaire pour faire tourner l'application : <strong>Docker Desktop</strong>,
+      disponible gratuitement sur Windows, Mac et Linux. Il n'y a rien d'autre à installer — ni Node.js,
+      ni PostgreSQL, ni aucune autre dépendance.
+    </p>
+
+    <h3>Démarrage</h3>
+    <p>Trois étapes depuis un terminal :</p>
+    <ol>
+      <li>Cloner le dépôt : <code>git clone https://github.com/Jallalben/DataShare.git</code></li>
+      <li>Copier la configuration : <code>cp .env.example .env</code></li>
+      <li>Démarrer : <code>docker compose up --build</code></li>
+    </ol>
+    <p>
+      L'application est ensuite disponible sur <strong>http://localhost:3000</strong>.
+      La première fois, Docker télécharge les images nécessaires — cela prend quelques minutes.
+      Les démarrages suivants sont instantanés.
+    </p>
+
+    <h3>Commandes utiles</h3>
+    <ul>
+      <li><code>docker compose up</code> — démarrer la stack</li>
+      <li><code>docker compose down</code> — arrêter la stack</li>
+      <li><code>make e2e</code> — lancer tous les tests E2E dans Docker</li>
+      <li><code>docker compose logs -f</code> — suivre les logs en temps réel</li>
+    </ul>
+
+    <div class="callout">
+      Les données (utilisateurs, fichiers) sont conservées dans des volumes Docker persistants.
+      Elles survivent aux redémarrages. Pour repartir d'une base propre :
+      <code>docker compose down -v</code>.
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════ 9. IA ═══════════════════════════════════ -->
+  <section>
+    <div class="section-label">Section 09</div>
+    <h2 class="section-title">Utilisation de l'IA dans le développement</h2>
+
+    <p>
+      J'ai utilisé Claude (Anthropic) comme assistant tout au long du développement,
+      via l'extension Claude Code dans Visual Studio Code. L'IA n'a pas écrit le projet à ma place —
+      elle a joué le rôle d'un pair avec qui réfléchir, déboguer et avancer plus vite sur les parties
+      techniques répétitives.
+    </p>
+
+    <div class="ai-grid">
+      <div class="ai-card">
+        <h4>Ce que l'IA a fait</h4>
+        <p>Génération de code boilerplate (configurations Docker, structure NestJS), aide au débogage des erreurs Cypress, rédaction des fichiers de documentation, suggestions sur les choix d'architecture.</p>
+      </div>
+      <div class="ai-card">
+        <h4>Ce que j'ai fait</h4>
+        <p>Toutes les décisions fonctionnelles, la validation de chaque bloc de code, les corrections quand l'IA se trompait, l'intégration et les tests manuels de chaque fonctionnalité.</p>
+      </div>
+      <div class="ai-card">
+        <h4>Ce que l'IA ne fait pas bien</h4>
+        <p>Elle ne connaît pas le contexte du projet sans qu'on le lui explique. Elle propose parfois des solutions trop complexes ou incorrectes — c'est au développeur de valider, corriger et adapter.</p>
+      </div>
+      <div class="ai-card">
+        <h4>Ce que ça change concrètement</h4>
+        <p>Les tâches répétitives (écrire des tests, configurer la CI, structurer la doc) prennent moins de temps. Cela laisse plus d'espace pour se concentrer sur la logique métier et la qualité du résultat final.</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      L'ensemble du code a été relu, compris et validé ligne par ligne.
+      Aucun bloc de code n'a été intégré sans être testé manuellement dans l'application.
+    </div>
+  </section>
+
+</body>
+</html>

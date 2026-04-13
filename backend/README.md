@@ -13,7 +13,7 @@ npm install
 npm run start:dev
 ```
 
-L'API répond sur `http://localhost:3001/api`.
+L'API répond sur `http://localhost:3001/api`. La documentation interactive Swagger est disponible sur `http://localhost:3001/api/docs` — elle liste tous les endpoints et permet de les tester directement depuis le navigateur.
 
 ---
 
